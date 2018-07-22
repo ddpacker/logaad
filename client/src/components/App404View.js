@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Landing extends Component {
+class App404View extends Component {
     render() {
         return(
             <div>
-                <h1>Landing Page</h1>
+                <h1>Page Not Found</h1>
             </div>
         )
     }
 }
 
-export default Landing;
+export default App404View;

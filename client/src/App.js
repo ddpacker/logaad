@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import NavBar from './components/NavBar';
-import Routes from './components/MainRouter';
+import Routes from './MainRouter';
 
 class App extends Component {
   render() {

@@ -3,8 +3,8 @@ import Auth from '../../services/Auth';
 import EventBus from '../../services/EventBus';
 
 class LoginModal extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { email : '',
                     password : ''
                 };
@@ -20,7 +20,7 @@ class LoginModal extends Component {
         });
     }
     handleSubmission() {
-        Auth.getToken(this.state.email, this.state.password);
+        var authToken = Auth.getToken(this.state.email, this.state.password);
     }
     render() {
         return(
@@ -55,7 +55,7 @@ class LoginModal extends Component {
                                     </ul>
                                 </div>
                                 <div className="col-sm-6 text-center">
-                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark">Submit</button>
+                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark" data-dismiss="modal">Submit</button>
                                 </div>
                             </div>
                         </div>

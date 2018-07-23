@@ -1,8 +1,10 @@
+import EventBus from "./EventBus";
+
 class Auth {
     static getToken(email, password) {
-        console.log(email, password);
+        var authToken = `${email} ${password}`
         if ((email === "admin@admin") && (password === "password")) {
-            return "A JSON TOKEN";
+            EventBus.eventEmitter.emit('authenticated', authToken);
         } else {
             return null;
         }

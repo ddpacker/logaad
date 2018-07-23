@@ -11,7 +11,7 @@ const Routes = () => (
     <Router>
         <Switch>
             <Route exact path = '/' component = { LandingView }/>
-            <PrivateRoute path = '/dashboard' component = { DashboardView }/>
+            <Route path = '/dashboard' component = { DashboardView }/>
             <Route component = { App404View }/>
         </Switch>
     </Router>

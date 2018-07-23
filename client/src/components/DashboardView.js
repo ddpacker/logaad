@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LoginModal from './landing/LoginModal';
 
 class DashboardView extends Component {
     constructor(props) {

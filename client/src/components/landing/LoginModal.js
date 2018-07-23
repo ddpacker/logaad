@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Auth from '../../services/Auth';
+import EventBus from '../../services/EventBus';
 
 class LoginModal extends Component {
     constructor() {

@@ -12,7 +12,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      token : ''
+      token : ""
     }
    
   }
@@ -27,7 +27,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar/>
+        <NavBar token={this.state.token}/>
         {this.state.token ? <DashboardView token={this.state.token}/> : <LandingView/>} 
       </div>
     );

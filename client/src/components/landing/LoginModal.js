@@ -5,11 +5,12 @@ import EventBus from '../../services/EventBus';
 class LoginModal extends Component {
     constructor(props) {
         super(props);
-        this.state = { email : '',
+        this.state = { username : '',
                     password : ''
                 };
         this.handleForm = this.handleForm.bind(this);
         this.handleSubmission = this.handleSubmission.bind(this);
+        this.pressEnter = this.pressEnter.bind(this);
     };
     handleForm(event) {
         const target = event.target;
@@ -20,7 +21,12 @@ class LoginModal extends Component {
         });
     }
     handleSubmission() {
-        var authToken = Auth.getToken(this.state.email, this.state.password);
+        Auth.getToken(this.state.username, this.state.password);
+    }
+    pressEnter(event) {
+        if (event.keyCode === 13) {
+            document.getElementById("submit").click();
+        }
     }
     render() {
         return(
@@ -34,16 +40,19 @@ class LoginModal extends Component {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="form-group">
-                                        <label htmlFor="email">Please enter your email address</label>
-                                        <input className="form-control" type="email" value={this.state.email} name="email" id="email" onChange={this.handleForm} placeholder="Email"/>
+                                        <label htmlFor="username">Please enter your username</label>
+                                        <input className="form-control" type="username" value={this.state.username} name="username" id="username" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="username"/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="password">Please enter your password</label>
-                                        <input className="form-control" type="password" value={this.state.password} name="password" id="password" onChange={this.handleForm} placeholder="Password"/>
+                                        <input className="form-control" type="password" value={this.state.password} name="password" id="password" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Password"/>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
+                                <div className="col-sm-6 text-center">
+                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark" id="submit" data-dismiss="modal">Submit</button>
+                                </div>
                                 <div className="col-sm-6">
                                     <ul>
                                         <li>
@@ -53,9 +62,6 @@ class LoginModal extends Component {
                                             <a href="#">Sign up for free today!</a>
                                         </li>
                                     </ul>
-                                </div>
-                                <div className="col-sm-6 text-center">
-                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark" data-dismiss="modal">Submit</button>
                                 </div>
                             </div>
                         </div>

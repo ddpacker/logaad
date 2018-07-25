@@ -97,7 +97,9 @@ class Chart extends Component {
     }
 
     showTooltips(data, xspace, posx, posy){
-        const interm = Math.round(data.length/4.5);
+        this.tooltip_props = {data:data, xspace:xspace, posxini:posx, posyini:posy, posx:0};
+
+        const interm = Math.floor(data.length/4.5);
         this.ctx.beginPath();
         this.ctx.fillStyle = this.elementsColor;
         this.ctx.textAlign = "left";
@@ -110,20 +112,55 @@ class Chart extends Component {
     }
 
     movingMouse(event){
-        console.log(event, this.canvas);
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawStock(this.data, this.full);
-        this.movingTooltip(event.layerX, event.layerY);
+        //console.log(event, this.canvas);
+        const index = Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace);
+
+        if(index!=this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
+            const tooltipWidth = 160;
+            let posx = this.tooltip_props.data[index].posx-tooltipWidth/2;
+            let posy = 0;
+            if(posx < 0)posx += tooltipWidth/2;
+            else if(posx+tooltipWidth > this.canvas.width)posx -= tooltipWidth/2;
+            if(posy+30 > this.tooltip_props.data[index].posy)posy = this.tooltip_props.posyini-30;
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawStock(this.data, this.full);
+            this.movingTooltip(index, posx, posy, tooltipWidth);
+        }
     }
 
-    movingTooltip(posx, posy){
+    movingTooltip(index, posx, posy, tooltipWidth){
+        this.tooltip_props.index = index;
+
         this.ctx.beginPath();
-        this.ctx.fillStyle = "#EEEEEE";
-        this.ctx.lineWidth = .3;
+        this.ctx.lineWidth = .7;
+        this.ctx.strokeStyle = "#666666";
+        this.ctx.setLineDash([3, 4]);
+        this.ctx.moveTo(this.tooltip_props.data[index].posx, 10);
+        this.ctx.lineTo(this.tooltip_props.data[index].posx, this.tooltip_props.posyini);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "#FFFFFF";
+        this.ctx.lineWidth = .7;
         this.ctx.strokeStyle = this.elementsColor;
-        this.ctx.rect(posx, posy, 140, 30);
+        this.ctx.rect(posx, posy, tooltipWidth, 30);
         this.ctx.fill();
         this.ctx.stroke();
+
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "#666666";
+        this.ctx.arc(this.tooltip_props.data[index].posx, this.tooltip_props.data[index].posy, 4, 0, 360);
+        this.ctx.fill();
+
+        this.ctx.font = "lighter 12px sans-serif";
+        this.ctx.textAlign = "left";
+        this.ctx.fillText(this.tooltip_props.data[index].average+" USD", posx+10, posy+20, tooltipWidth/2, 30);
+
+        this.ctx.fillStyle = this.elementsColor;
+        this.ctx.textAlign = "right";
+        this.ctx.fillText(this.tooltip_props.data[index].label, posx+tooltipWidth-10, posy+20, tooltipWidth/2, 30);
+
     }
     
     findLowHigh(data){

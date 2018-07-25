@@ -1,9 +1,9 @@
 import EventBus from "./EventBus";
 
 class Auth {
-    static getToken(email, password) {
-        var authToken = `${email} ${password}`
-        if ((email === "admin@admin") && (password === "password")) {
+    static getToken(username, password) {
+        var authToken = username;
+        if ((username === "admin") && (password === "password")) {
             EventBus.eventEmitter.emit('authenticated', authToken);
         } else {
             return null;

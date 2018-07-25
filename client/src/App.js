@@ -3,17 +3,16 @@ import './App.css';
 import { Redirect } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
-import Routes from './MainRouter';
 import EventBus from './services/EventBus';
+import DashboardView from './components/DashboardView';
+import LandingView from './components/LandingView';
 
 class App extends Component {
 
   constructor() {
     super();
-    if(!this.state || !this.state.token){
-       this.state = {
-        token : ""
-      }
+    this.state = {
+      token : ""
     }
    
   }
@@ -26,13 +25,10 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.token !== "") {
-      return <Redirect to = '/dashboard'/>
-    }
     return (
       <div>
-        <NavBar/>
-        <Routes token={this.state.token}/>
+        <NavBar token={this.state.token}/>
+        {this.state.token ? <DashboardView token={this.state.token}/> : <LandingView/>} 
       </div>
     );
   }

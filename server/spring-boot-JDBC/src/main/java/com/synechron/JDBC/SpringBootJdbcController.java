@@ -1,4 +1,5 @@
 package com.synechron.JDBC;  
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ import javax.json.JsonObjectBuilder;
 public class SpringBootJdbcController {  
     @Autowired  
     JdbcTemplate jdbc; 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/CreateUser", method = RequestMethod.POST)
     public String CreateUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -93,6 +95,7 @@ public class SpringBootJdbcController {
     
     
     //Buy or Sell Stocks
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/BuyOrSellStocks", method = RequestMethod.POST)
     public String BuyOrSellStocks(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -166,6 +169,7 @@ public class SpringBootJdbcController {
     }
     
   //Amount of stock by user
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/AmountOfStockByUser", method = RequestMethod.POST)
     public String AmountOfStockByUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -223,6 +227,7 @@ OUT out_result INT
    			return Message.toString();    	
     }
     //Amount of stock by user
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/MoneyGeneratedByUserStock", method = RequestMethod.POST)
     public String MoneyGeneratedByUserStock(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -281,6 +286,7 @@ OUT out_result INT
     }
     
     //Add or Remove to watchlist
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/AddRemoveWatchlist", method = RequestMethod.POST)
     public String AddRemoveWatchlist(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -346,6 +352,7 @@ OUT out_result INT
     }
     
     //Enable or Disable User
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/EnableOrDisableUser", method = RequestMethod.POST)
     public String EnableOrDisableUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -402,6 +409,7 @@ IN  in_active tinyint(4)
    			return Message.toString();          	
     }
     //List stocks by User
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/ListStocksByUser", method = RequestMethod.POST)
     public String ListStocksByUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -459,6 +467,7 @@ IN  in_userid varchar(20)
     }    
     
   //LogIn
+    @CrossOrigin(origins = "http://localhost:3000")    
     @RequestMapping(value = "/LogIn", method = RequestMethod.POST)
     public String LogIn(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
     	/*
@@ -510,6 +519,7 @@ IN  in_userid varchar(20)
    			
    			JsonObject  LoginObject = Json.createObjectBuilder()
    					.add("userid", payload.get("in_userid").toString())
+   					.add("exist", pcount)
    					.add("name", UserName)
    					.add("email", UserMail)   					
    					.add("active", String.valueOf(UserActive))

@@ -1,17 +1,19 @@
 import EventBus from "./EventBus";
 
 class Auth {
-    static async getToken(username, password) {
+    static async getToken(state) {
         var authToken = null;
+        var username = state.username;
+        var password = state.password;
         var AccessGranted = -1;
-        var Name = "";
-        var Mail = "";
+        //var Name = "";
+        //var Mail = "";
         this.login(username,password).then(res=>{
             console.log(res);
             AccessGranted = res.LoginInfo.exist
             authToken = JSON.stringify(res.LoginInfo.userid);
-            Name = res.LoginInfo.name;
-            Mail = res.LoginInfo.email;
+            //Name = res.LoginInfo.name;
+            //Mail = res.LoginInfo.email;
             if (AccessGranted == 1) {
                 console.log("Logged In");
                 EventBus.eventEmitter.emit('authenticated', authToken);

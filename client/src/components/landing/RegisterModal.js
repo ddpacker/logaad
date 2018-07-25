@@ -4,20 +4,29 @@ class RegisterModal extends Component {
     constructor(props) {
         super(props);
         this.state = { email : '',
-                    password : ''
+                    password : '',
+                    firstName : '',
+                    lastName : ''
                 };
         this.handleForm = this.handleForm.bind(this);
         this.handleSubmission = this.handleSubmission.bind(this);
         this.pressEnter = this.pressEnter.bind(this);
     };
-    handleForm() {
-
+    handleForm(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
     }
     handleSubmission() {
 
     }
-    pressEnter() {
-        
+    pressEnter(event) {
+        if (event.keyCode === 13) {
+            document.getElementById("registersubmit").click();
+        }
     }
     render() {
         return(
@@ -34,16 +43,32 @@ class RegisterModal extends Component {
                                 <div className="col-sm-12">
                                     <div className="form-group">
                                         <label htmlFor="email">Please enter your email address</label>
-                                        <input className="form-control" type="email" value={this.state.email} name="email" id="email" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Email"/>
+                                        <input className="form-control" type="email" value={this.state.email} name="email" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Email"/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="userName">Please enter your username</label>
+                                        <input className="form-control" type="text" value={this.state.userName} name="userName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Username"/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="password">Please enter your password</label>
-                                        <input className="form-control" type="password" value={this.state.password} name="password" id="password" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Password"/>
+                                        <input className="form-control" type="password" value={this.state.password} name="password" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Password"/>
                                     </div>
                                 </div>
                             </div>
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    <label htmlFor="firstName">First Name</label>
+                                    <input className="form-control" type="text" value={this.state.firstName} name="firstName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="First Name"/>
+                                </div>
+                                <div className="col-sm-6">
+                                    <label htmlFor="lastName">Last Name</label>
+                                    <input className="form-control" type="text" value={this.state.lastName} name="lastName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Last Name"/>
+                                </div>
+                            </div>
                         </div>
-
+                        <div className="modal-footer">
+                            <button className="btn btn-success" id="registersubmit" onClick={this.handleSubmission} data-dismiss="modal">Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>

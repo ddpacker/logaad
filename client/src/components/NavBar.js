@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import Search from '../services/Search';
 
 class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            token : ""
+        }
+    }
     render() {
         return(
             <nav className="navbar navbar-expand-md navbar-light" style={{backgroundColor: "#e6f2ff"}}>
                 <div className="mx-auto order-0">
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand">
                         <img src={require('../img/logo.png')}/>
                     </a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
@@ -13,14 +20,21 @@ class NavBar extends Component {
                     </button>
                 </div>
                 <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                    <ul className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <button type="button" className="btn btn-dark" data-toggle="modal" data-target="#login">Login</button> 
-                        </li>
-                        <li className="nav-item">
-                            <button type="button" className="btn btn-dark" data-toggle="modal" data-target="#register">Register</button> 
-                        </li>
-                    </ul>
+                    {this.props.token == "" ?
+
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <button type="button" className="btn btn-dark" data-toggle="modal" data-target="#login">Login</button> 
+                            </li>
+                            <li className="nav-item">
+                                <button type="button" className="btn btn-dark" data-toggle="modal" data-target="#register">Register</button> 
+                            </li>
+                        </ul>
+
+                        :
+
+                        <Search/>
+                    }
                 </div>
             </nav>
 

@@ -457,6 +457,72 @@ IN  in_userid varchar(20)
    	
    			return Message.toString();     	
     }    
+    
+  //LogIn
+    @RequestMapping(value = "/LogIn", method = RequestMethod.POST)
+    public String LogIn(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
+    	/*
+		SET @RESULT = -1;
+		SET @UNAME = '';
+		SET @MAIL = '';
+		SET @ACTIVE = '';
+		CALL sp_Login('omar1','cat$123',@RESULT,@UNAME,@MAIL,@ACTIVE);
+		SELECT @RESULT AS Result,@UNAME as UserName,@MAIL as Mail,@ACTIVE as Active;
+   	 	{
+			"in_userid":"greg",
+			"in_password":"clasic123"
+		 }
+   	 */
+
+   	//Step 1
+   	
+   			try {
+   				Class.forName("com.mysql.jdbc.Driver").newInstance();
+   			}
+   			catch(ClassNotFoundException e) {
+   				System.out.println("Driver Class Not Found");
+   			}
+   			//Step 2
+   			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/stocksdb", "root", "password");    			
+   			//Step 3
+   			CallableStatement cstmt = null;
+   			//Step 4
+   			cstmt = con.prepareCall("{call sp_Login(?,?,?,?,?,?)}");
+   			cstmt.setString(1, payload.get("in_userid").toString());
+   			cstmt.setString(2, payload.get("in_password").toString());   			
+   			cstmt.registerOutParameter(3, Types.INTEGER); //output parameter is second parameter type integer
+   			cstmt.registerOutParameter(4, Types.VARCHAR);
+   			cstmt.registerOutParameter(5, Types.VARCHAR);
+   			cstmt.registerOutParameter(6, Types.INTEGER);
+   			cstmt.execute();
+   			int pcount = cstmt.getInt(3);
+   			String UserName = cstmt.getString(4);
+   			String UserMail = cstmt.getString(5);
+   			int UserActive = cstmt.getInt(6);
+   			//System.out.println("The output value is " + pcount);
+   			cstmt.close();
+   			con.close();    	
+   			
+   			String outputMessage = "Invalid Login";
+   			if(pcount==1) {
+   				outputMessage = "Succesful LogIn";
+   			}
+   			
+   			JsonObject  LoginObject = Json.createObjectBuilder()
+   					.add("userid", payload.get("in_userid").toString())
+   					.add("name", UserName)
+   					.add("email", UserMail)   					
+   					.add("active", String.valueOf(UserActive))
+   					.build();
+   			
+   			JsonObject Message = Json.createObjectBuilder()
+   					.add("LoginInfo", LoginObject)
+   					.add("Message", outputMessage)
+   					.build();
+   	
+   			return Message.toString();    			 
+    	
+    }
 
     /*
     @RequestMapping("/CreateUser")  

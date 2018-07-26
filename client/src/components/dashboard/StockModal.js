@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import TransactionModule from './TransactionModal';
+import Chart from '../../services/Chart';
 
 class StockModal extends Component {
   constructor(props) {
@@ -6,52 +8,16 @@ class StockModal extends Component {
   }
   render() {
     return (
-      <div class="modal" id="stock" tabindex="-1" role="dialog">
-        <div
-          class="modal-dialog modal-lg"
-          /*style="max-width: 80%"*/
-          role="document"
-        >
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div className="modal" id="stock" tabIndex="-1" role="dialog">
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content">
+            <div className={(this.props.stock.percent > 0) ? 'modal-header bg-success' : 'modal-header bg-danger'}>
+              <h5 className="modal-title">{this.props.stock.ticker}</h5>
             </div>
             <div class="modal-body">
-              <p>Modal body text goes here.</p>
+              <Chart width="600" height="400" stock={this.props.stock.ticker} type="full"/>
             </div>
-
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-toggle="collapse"
-                data-target="#demo"
-              >
-                Simple collapsible
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-toggle="collapse"
-                data-target="#demo"
-              >
-                Simple collapsible2
-              </button>
-              <div id="demo" class="collapse">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </div>
-            </div>
+            <TransactionModule/>
           </div>
         </div>
       </div>

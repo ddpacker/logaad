@@ -2,6 +2,8 @@
   text-align: center;
 }
 
+.bod
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -14,6 +16,9 @@
   color: white;
 }
 
+.jumbotron {
+  background: rgba(255, 255, 255, 0.8);
+}
 .App-title {
   font-size: 1.5em;
 }
@@ -25,6 +30,12 @@
 .btn {
   margin-left: 2px;
   margin-right: 2px;
+}
+
+.landing {
+  height: 100vh;
+  width: 100vw;
+  background-image: url("img/background.png");
 }
 
 @keyframes App-logo-spin {

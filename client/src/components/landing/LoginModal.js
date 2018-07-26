@@ -21,11 +21,11 @@ class LoginModal extends Component {
         });
     }
     handleSubmission() {
-        Auth.getToken(this.state.username, this.state.password);
+        Auth.getToken(this.state);
     }
     pressEnter(event) {
         if (event.keyCode === 13) {
-            document.getElementById("submit").click();
+            document.getElementById("loginsubmit").click();
         }
     }
     render() {
@@ -51,7 +51,7 @@ class LoginModal extends Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-6 text-center">
-                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark" id="submit" data-dismiss="modal">Submit</button>
+                                    <button type="button" onClick={this.handleSubmission} className="btn btn-dark" id="loginsubmit" data-dismiss="modal">Submit</button>
                                 </div>
                                 <div className="col-sm-6">
                                     <ul>

@@ -6,11 +6,27 @@ class TestView extends Component {
     constructor() {
         super();
         this.state = {
-            ticker: "MSFT",
-            percent: 40
+            ticker: "goog",
+            name: "Facebook Inc.",
+            isOwned: 
+                { 
+                    status: false,
+                    shares: 15,
+                    averagePrice: 130
+                },
+            price: 110,
+            percent: -40,
+            open: 129,
+            high: 150,
+            low: 129,
+            high52: 150,
+            low52: 105,
+            volume: 2000000
         }
     }
-
+    componentWillMount() {
+        //API({this.state.ticker})
+    }
     render() {
         return(
             <div>

@@ -4,45 +4,49 @@ class Chart extends Component {
 
     constructor(){
         super();
-        this.state = {canvas:""};
         this.elementsColor = "#CCCCCC";
-    }
-
-    componentDidMount() {
-        console.log(this.props);
-        const type = this.props.type?this.props.type:"full";
-        const time = this.props.time?this.props.time:"day";
-        const extras = "/batch?types=quote,chart&range="+{day:"1d&chartInterval=5", month:"1m"}[time];
-        this.canvas = document.getElementById(this.props.stock+this.props.width+this.props.height);
-        this.ctx = this.canvas.getContext("2d");
-        this.full = (type==="full");
-        this.bringStock(extras);
+        this.id = Math.round(Math.random*1000000);
     }
 
     render () {
+        this.id = this.props.stock+this.props.width+this.props.height;
+        setTimeout(this.did_render.bind(this), 100);
         return (
-            <canvas width={this.props.width} height={this.props.height} id={this.props.stock+this.props.width+this.props.height}></canvas>
+            <canvas width={this.props.width} height={this.props.height} id={this.id}></canvas>
         );
     }
+
+    did_render(){
+        const type = this.props.type?this.props.type:"full";
+        this.full = (type==="full");
+        this.canvas = document.getElementById(this.id);
+        this.ctx = this.canvas.getContext("2d");
+        this.data = this.props.data;
+        if(this.data)this.drawStock(this.data);
+        //else if(this.data != "")this.bringStock();
+    }
     
-    bringStock(extras){
+    /*bringStock(){
         const path = "https://api.iextrading.com/1.0/stock/";
+        const time = this.props.time?this.props.time:"day";
+        const extras = "/batch?types=quote,chart&range="+{day:"1d&chartInterval=5", month:"1m"}[time];
         fetch(path + this.props.stock + extras, {method: "get"}).then(function(response){
             response.json().then(function(data) {
                 this.data = data;
-                this.drawStock(this.data, this.full);
-                if(this.full)this.canvas.onmousemove = this.movingMouse.bind(this);
+                this.drawStock(this.data);
             }.bind(this));
         }.bind(this));
-    }
+    }*/
     
-    drawStock(data, full){
+    drawStock(data){
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         const differencials = this.findLowHigh(data.chart);
-        const ratespace = full ? 20 : 0;
-        const posxini = full ? 70 : 0;
-        const posyini = this.props.height - (full ? ratespace : 0);
-        const finalwidth = this.props.width - (full ? posxini+10 : 0);
-        const finalheight = posyini - (full ? 10 : 0);
+        const ratespace = this.full ? 20 : 0;
+        const posxini = this.full ? 70 : 0;
+        const posyini = this.props.height - (this.full ? ratespace : 0);
+        const finalwidth = this.props.width - (this.full ? posxini+10 : 0);
+        const finalheight = posyini - (this.full ? 10 : 0);
         const color = data.quote.change>0 ? "rgba(0, 255, 0, " : "rgba(255, 0, 0, ";
         const xspace = this.roundStock(finalwidth / (data.chart.length-1));
         let posx = posxini;
@@ -67,7 +71,7 @@ class Chart extends Component {
             if(this.props.test)console.log(average);
         }
         this.ctx.stroke();
-        if(full){
+        if(this.full){
             const grad = this.ctx.createLinearGradient(posxini, posyini-finalheight, posxini, posyini);
             grad.addColorStop(0, color+".3)");
             grad.addColorStop(1, color+"0)");
@@ -77,6 +81,7 @@ class Chart extends Component {
             this.ctx.fill();
             this.quoteStock(data.quote, {x:posxini, y:posyini-finalheight, width:finalwidth, height:finalheight}, differencials);
             this.showTooltips(tooltips, xspace, posxini, posyini);
+            this.canvas.onmousemove = this.movingMouse.bind(this);
         }
     }
 
@@ -98,7 +103,6 @@ class Chart extends Component {
 
     showTooltips(data, xspace, posx, posy){
         this.tooltip_props = {data:data, xspace:xspace, posxini:posx, posyini:posy, posx:0};
-
         const interm = Math.floor(data.length/4.5);
         this.ctx.beginPath();
         this.ctx.fillStyle = this.elementsColor;
@@ -114,7 +118,6 @@ class Chart extends Component {
     movingMouse(event){
         //console.log(event, this.canvas);
         const index = Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace);
-
         if(index!=this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
             const tooltipWidth = 160;
             let posx = this.tooltip_props.data[index].posx-tooltipWidth/2;
@@ -122,15 +125,14 @@ class Chart extends Component {
             if(posx < 0)posx += tooltipWidth/2;
             else if(posx+tooltipWidth > this.canvas.width)posx -= tooltipWidth/2;
             if(posy+30 > this.tooltip_props.data[index].posy)posy = this.tooltip_props.posyini-30;
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.drawStock(this.data, this.full);
+            //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawStock(this.data);
             this.movingTooltip(index, posx, posy, tooltipWidth);
         }
     }
 
     movingTooltip(index, posx, posy, tooltipWidth){
         this.tooltip_props.index = index;
-
         this.ctx.beginPath();
         this.ctx.lineWidth = .7;
         this.ctx.strokeStyle = "#666666";
@@ -160,7 +162,6 @@ class Chart extends Component {
         this.ctx.fillStyle = this.elementsColor;
         this.ctx.textAlign = "right";
         this.ctx.fillText(this.tooltip_props.data[index].label, posx+tooltipWidth-10, posy+20, tooltipWidth/2, 30);
-
     }
     
     findLowHigh(data){

@@ -7,18 +7,34 @@ class LandingView extends Component {
         return(
             <div className="landing">
                 <div className="row" style={{ height : "10vh" }}></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
                 <div className="row">
                     <div className="col-sm-1">
                     </div>
                     <div className="col-sm-10">
                         <div className="jumbotron">
                             <div className="row">
-                                <div className="col-xl-4">
-                                    <img src={require('../img/logo.svg')} style={{ width : "20vw"}}/>
+                                <div className="col-xl-4 text-center">
+                                    <img className="mx-auto my-0 d-block" src={require('../img/logo.svg')} style={{ width : "20vw" }}/>
+                                    <h1> Logaad </h1>
                                 </div>
                                 <div className="col-xl-8">
                                     <div className="jumbotron">
-                                        <h1> Welcome to Logaad </h1>
+                                        <h1> A new way to invest </h1>
                                         <p>"Sed ut perspiciatis unde omnis iste natus error 
                                             sit voluptatem accusantium doloremque laudantium, 
                                             totam rem aperiam, eaque ipsa quae ab illo inventore

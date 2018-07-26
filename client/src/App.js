@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import EventBus from './services/EventBus';
 import DashboardView from './components/DashboardView';
 import LandingView from './components/LandingView';
+import Routes from './MainRouter';
 
 class App extends Component {
 
@@ -28,7 +29,7 @@ class App extends Component {
     return (
       <div>
         <NavBar token={this.state.token}/>
-        {this.state.token ? <DashboardView token={this.state.token}/> : <LandingView/>} 
+        {this.state.token ? <DashboardView token={this.state.token}/> : <Routes/>} 
       </div>
     );
   }

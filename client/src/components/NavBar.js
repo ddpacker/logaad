@@ -10,10 +10,10 @@ class NavBar extends Component {
     }
     render() {
         return(
-            <nav className="navbar navbar-expand-md navbar-light" style={{backgroundColor: "#e6f2ff"}}>
+            <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                 <div className="mx-auto order-0">
                     <a className="navbar-brand">
-                        <img src={require('../img/logo.png')}/>
+                        <img src={require('../img/brand.png')} style={{ height : "50px"}}/>
                     </a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                         <span className="navbar-toggler-icon"></span>

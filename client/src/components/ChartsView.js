@@ -7,7 +7,7 @@ class ChartsView extends Component {
             <div>
                 <Chart width="200" height="100" stock="pzza" type="simple" time="month"/>
                 <br/>
-                <Chart width="600" height="400" stock="aapl" type="full"/>
+                <Chart width="600" height="400" stock="aapl" test="" time="month"/>
             </div>
         )
     }

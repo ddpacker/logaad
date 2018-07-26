@@ -38,7 +38,7 @@ class Chart extends Component {
     
     drawStock(data, full){
         const differencials = this.findLowHigh(data.chart);
-        const ratespace = full ? 200 : 0;
+        const ratespace = full ? 20 : 0;
         const posxini = full ? 70 : 0;
         const posyini = this.props.height - (full ? ratespace : 0);
         const finalwidth = this.props.width - (full ? posxini+10 : 0);

@@ -184,8 +184,7 @@ class Chart extends Component {
         return {low:this.roundStock(low, "floor"), high:this.roundStock(high, "ceil"), difference:this.roundStock(difference, "ceil")};
     }
     
-    roundStock(value, method="round"){
-        const roundNum = 10;
+    roundStock(value, method="round", roundNum=100){
         return Math[method](value*roundNum)/roundNum;
     }
 }

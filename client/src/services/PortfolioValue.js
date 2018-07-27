@@ -2,16 +2,17 @@ import EventBus from "./EventBus";
 
 class Tickers { 
     static suscribeTicker(stock, time, callBack){
-        EventBus.getEventEmitter().on(stock+"_"+time, callBack);
         if(!this.tickers)this.tickers = {};
         if(!this.tickers[stock+time])this.createTicker(stock, time);
-        this.bringStock(stock, time);
+        EventBus.getEventEmitter().on(stock+"_"+time, callBack);
+        return "";
     }
 
     static createTicker(stock, time){
         this.tickers[stock+time] = {
             inte: setInterval(this.bringStock, {month:43200000, day:300000}[time], stock, time)
         };
+        this.bringStock(stock, time);
     }
 
     static bringStock(stock, time){

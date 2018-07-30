@@ -12,7 +12,7 @@ class Auth {
         
         this.RegisterUser(username,name,email,password).then(res=>{
             var Message = res.Message;
-            if(Message == "Operation Succesful"){
+            if(Message === "Operation Succesful"){
                 alert("User created!");
             }else{
                 alert("Operation Failed");
@@ -41,13 +41,13 @@ class Auth {
             authToken = JSON.stringify(res.LoginInfo.userid);
             //Name = res.LoginInfo.name;
             //Mail = res.LoginInfo.email;
-            if (AccessGranted == 1) {
+            if (AccessGranted === 1) {
                 //console.log("Logged In");
                 EventBus.eventEmitter.emit('authenticated', authToken);
             }
         });
         //console.log("Before IF " + AccessGranted);
-        if (AccessGranted == 1) {
+        if (AccessGranted === 1) {
             //console.log("Logged In");
             EventBus.eventEmitter.emit('authenticated', authToken);
         } else {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Tickers from '../../services/Tickers';
+import TickerSwap from '../../services/TickerSwap';
 
 class PortfolioComponent extends Component {
     constructor(props) {
@@ -9,17 +10,18 @@ class PortfolioComponent extends Component {
 
     handleClick(event) {
         event.preventDefault();
-        console.log(event.target);
-        this.props.swapTicker(event.value);
+        var symbol = event.target.getAttribute("value")
+        TickerSwap.emitSwap(symbol);
     }
 
     render() {
         return(
             <div className="list-group">
-                {this.props.stocks
-                    ? this.props.stocks.map(function(ticker){
+            
+                {this.props.portfolio
+                    ? this.props.portfolio.tickers.map(function(ticker){
                         return(
-                            <a onClick={this.handleClick} value={ticker} data-toggle="modal" data-target="#stock" className="list-group-item list-group-item-action">{ticker}</a>
+                            <a onClick={this.handleClick} key={ticker.tickerName} value={ticker.tickerName} data-toggle="modal" data-target="#stock" className="list-group-item list-group-item-action">{ticker.tickerName}</a>
                         )
                     }.bind(this))
                     : null

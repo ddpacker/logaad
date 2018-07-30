@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TransactionModule from './TransactionModal';
 import Chart from '../../services/Chart';
+import PortfolioValue from "../../services/PortfolioValue";
 
 class StockModal extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class StockModal extends Component {
     }
   }
   render() {
+    const value = this.props.data?PortfolioValue.verifyData(this.props.data.chart, 10):null;
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
         {this.props.data ?
@@ -37,7 +39,7 @@ class StockModal extends Component {
             </div>
             <div class="modal-body">
               <div className="text-center">
-                <h1 className={(this.props.data.quote.changePercent > 0) ? 'text-success' : 'text-danger'}>${(Math.round((this.props.data.chart[(this.props.data.chart.length - 1)].average) * 100)) / 100} USD</h1>
+                <h1 className={(this.props.data.quote.changePercent > 0) ? 'text-success' : 'text-danger'}>${(Math.round(value.average * 100)) / 100} USD</h1>
                 <Chart width={(this.state.width)} height={(this.state.width * 0.6)} data={this.props.data} type="full"/>
               </div>
               {this.props.data.quote.isOwned

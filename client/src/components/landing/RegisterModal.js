@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Auth from '../../services/Auth';
 
 class RegisterModal extends Component {
     constructor(props) {
@@ -6,7 +7,8 @@ class RegisterModal extends Component {
         this.state = { email : '',
                     password : '',
                     firstName : '',
-                    lastName : ''
+                    lastName : '',
+                    userName : ''
                 };
         this.handleForm = this.handleForm.bind(this);
         this.handleSubmission = this.handleSubmission.bind(this);
@@ -21,7 +23,14 @@ class RegisterModal extends Component {
         });
     }
     handleSubmission() {
-
+        /*
+        console.log("First Name " + this.state.firstName
+    + " Last Name " + this.state.lastName 
+    + " Email " + this.state.email
+    + " Password " + this.state.password 
+    + " UserName " + this.state.userName
+    );*/
+        Auth.createUser(this.state);
     }
     pressEnter(event) {
         if (event.keyCode === 13) {
@@ -31,6 +40,9 @@ class RegisterModal extends Component {
     render() {
         return(
             <div className="modal fade" id="register" role="dialog">
+            <div class="alert alert-primary" role="alert">
+  This is a primary alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+</div>
                 <div className="modal-dialog" role="doc">
                     <div className="modal-content">
 

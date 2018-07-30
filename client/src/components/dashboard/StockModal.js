@@ -101,7 +101,7 @@ class StockModal extends Component {
                 </div>
               </div>
             </div>
-            <TransactionModule/>
+            <TransactionModule token={this.props.token}/>
           </div>
         </div>
         : null}

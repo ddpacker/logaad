@@ -27,7 +27,7 @@ class DashboardView extends Component {
           stock
         </button>
         <div className="row" />
-        <StockModal ticker={this.state.ticker} />
+        <StockModal token={this.props.token} ticker={this.state.ticker} />
         {this.state.token}
         DASHBOARD VIEW
       </div>

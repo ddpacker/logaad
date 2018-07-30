@@ -6,12 +6,11 @@ import PortfolioComponent from './dashboard/PortfolioComponent';
 import TickerSwap from '../services/TickerSwap';
 
 class TestView extends Component {
-
     constructor() {
         super();
         this.state = {
-            ticker: "goog",
-        }   
+            ticker: "fb"
+        };
     }
     componentWillMount() {
         TickerSwap.subscribeSwap(this.setTicker.bind(this));

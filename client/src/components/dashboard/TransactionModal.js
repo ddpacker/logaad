@@ -21,22 +21,22 @@ class TransactionModule extends Component {
                 </div>
                 <div className="card-footer">
                     <div className="row text-center">
-                        <div className="col-sm-5">
+                        <div className="col-sm-4">
                             <button className="btn btn-success btn-block" data-toggle="collapse" data-target="#collapseBuy">
                                 <i className="material-icons my-0 py-0">attach_money</i>
-                                <h5>Buy</h5>
+                                <h5>BUY</h5>
                             </button>
                         </div>
-                        <div className="col-sm-5">
+                        <div className="col-sm-4">
                             <button className="btn btn-danger btn-block" data-toggle="collapse" data-target="#collapseSell">
                                 <i className="material-icons my-0 py-0">money_off</i>
-                                <h5>Sell</h5>
+                                <h5>SELL</h5>
                             </button>
                         </div>
-                        <div className="col-sm-2">
-                            <button className="btn btn-warning btn-block" data-toggle="collapse" data-target="#collapseWatch">
+                        <div className="col-sm-4">
+                            <button className="btn btn-info btn-block" data-toggle="collapse" data-target="#collapseWatch">
                                 <i className="material-icons my-0 py-0">remove_red_eye</i>
-                                <h5>Watch</h5>
+                                <h5>WATCH</h5>
                             </button>
                         </div>
                     </div>

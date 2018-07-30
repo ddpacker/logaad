@@ -20,12 +20,10 @@ class Search extends Component {
             type="search"
             placeholder="Search"
           />
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Search
-          </button>
+          <img
+            src={require("../img/searchIcon.png")}
+            style={{ height: "35px" }}
+          />
         </div>
       </form>
     );
@@ -37,7 +35,7 @@ class Search extends Component {
     var currentFocus;
     const inp = document.getElementById(id);
     /*execute a function when someone writes in the text field:*/
-    inp.addEventListener("input", function(e) {
+    inp.addEventListener("input", function (e) {
       var a,
         b,
         i,
@@ -51,7 +49,8 @@ class Search extends Component {
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
-      a.setAttribute("class", "autocomplete-items");
+      a.setAttribute("class", "list-group");
+      a.setAttribute("style", "position: absolute");
       /*append the DIV element as a child of the autocomplete container:*/
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
@@ -62,17 +61,22 @@ class Search extends Component {
           arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()
         ) {
           /*create a DIV element for each matching element:*/
-          b = document.createElement("DIV");
+          b = document.createElement("a");
+          b.setAttribute("id", this.id + "autocomplete");
+          b.setAttribute("class", "list-group-item list-group-item-action");
+          b.setAttribute("href", "#");
+
           /*make the matching letters bold:*/
           b.innerHTML =
             "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
           b.innerHTML += arr[i].name.substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          /*execute a function when someone clicks on the item value (DIV element):*/
-          b.addEventListener("click", function(e) {
+          b.innerHTML += "<input type='hidden' value='" + arr[i].symbol + "'>";
+          /*execute a function when someone clicks on the item value (a element):*/
+          b.addEventListener("click", function (e) {
             /*insert the value for the autocomplete text field:*/
             inp.value = this.getElementsByTagName("input")[0].value;
+            console.log(this.getElementsByTagName("input")[0].value);
             /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
             closeAllLists();
@@ -82,9 +86,9 @@ class Search extends Component {
       }
     });
     /*execute a function presses a key on the keyboard:*/
-    inp.addEventListener("keydown", function(e) {
+    inp.addEventListener("keydown", function (e) {
       var x = document.getElementById(this.id + "autocomplete-list");
-      if (x) x = x.getElementsByTagName("div");
+      if (x) x = x.getElementsByTagName("a");
       if (e.keyCode == 40) {
         /*If the arrow DOWN key is pressed,
           increase the currentFocus variable:*/
@@ -121,7 +125,7 @@ class Search extends Component {
       }
     }
     function closeAllLists(elmnt) {
-      var x = document.getElementsByClassName("autocomplete-items");
+      var x = document.getElementsByClassName("list-group");
       for (var i = 0; i < x.length; i++) {
         if (elmnt != x[i] && elmnt != inp) {
           x[i].parentNode.removeChild(x[i]);
@@ -129,7 +133,7 @@ class Search extends Component {
       }
     }
     /*execute a function when someone clicks in the document:*/
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
       closeAllLists(e.target);
     });
   }
@@ -137,9 +141,9 @@ class Search extends Component {
   bringTickers() {
     const path = "https://api.iextrading.com/1.0/ref-data/symbols";
     fetch(path, { method: "get" }).then(
-      function(response) {
+      function (response) {
         response.json().then(
-          function(data) {
+          function (data) {
             for (let i = 0; i < data.length; i++) {
               if (data[i].type == "cs" && data[i].isEnabled)
                 this.tickers.push(data[i]);

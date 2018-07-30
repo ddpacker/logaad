@@ -22,7 +22,7 @@ class PortfolioValue {
             response.json().then(function(data) {
                 let obj = {
                     totalEquity: 0, 
-                    tickers: {}
+                    tickers: []//{}
                 };
                 console.log(this.portfolio);
                 for (let i in data){
@@ -30,17 +30,25 @@ class PortfolioValue {
                         const stock = i.toLowerCase();
                         const chart = this.verifyData(data[i].chart, 4);
                         const stockEquity = chart.average * stocks[stock];
-                        obj.tickers[stock] = {
+                        const ticker = /*obj.tickers[stock] = */{
+                            tickerName: stock,
                             tickerValue: Math.round(chart.average*100)/100, 
                             stockEquity: Math.round(stockEquity*100)/100
                         };
+                        obj.tickers.push(ticker);
                         obj.totalEquity += stockEquity;
                     }
-                }  
+                }
+                obj.tickers.sort(this.compare);
                 obj.totalEquity = Math.round(obj.totalEquity*100)/100;
                 EventBus.eventEmitter.emit("portfolio", obj);
             }.bind(this));
         }.bind(this));
+    }
+
+    static compare(a, b) {
+        if (a.tickerName < b.tickerName)return -1;
+        else return 1;
     }
 
     static verifyData(data, num) {

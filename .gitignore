@@ -1,3 +1,5 @@
 node_modules
 .metadata
 .recommenders
+src/App.js
+../.gitignore

@@ -10,16 +10,15 @@ class PortfolioComponent extends Component {
     handleClick(event) {
         event.preventDefault();
         console.log(event.target);
-        this.props.swapTicker(event.value);
     }
 
     render() {
         return(
             <div className="list-group">
-                {this.props.stocks
-                    ? this.props.stocks.map(function(ticker){
+                {this.props.portfolio.tickers
+                    ? this.props.portfolio.tickers.map(function(ticker){
                         return(
-                            <a onClick={this.handleClick} value={ticker} data-toggle="modal" data-target="#stock" className="list-group-item list-group-item-action">{ticker}</a>
+                            <a onClick={this.handleClick} value={ticker} data-toggle="modal" data-target="#stock" className="list-group-item list-group-item-action">Stock 1: {ticker}</a>
                         )
                     }.bind(this))
                     : null

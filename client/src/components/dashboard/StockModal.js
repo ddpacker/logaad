@@ -28,7 +28,7 @@ class StockModal extends Component {
     }
   }
   render() {
-    const value = this.props.data?PortfolioValue.verifyData(this.props.data.chart, 10):null;
+    const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, 10):null;
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
         {this.props.data ?

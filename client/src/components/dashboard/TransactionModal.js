@@ -22,6 +22,7 @@ class TransactionModule extends Component {
         console.log("Handle Buy", this);
         this.BuySale("omar","INTC",250,50,"B").then(res=>{
             console.log(res);
+            alert("buy");
         });
     }
     handleSell(state){
@@ -29,6 +30,7 @@ class TransactionModule extends Component {
         console.log("Handle SELL", this);
         this.BuySale("omar","INTC",250,50,"S").then(res=>{
             console.log(res);
+            alert("sell");
         });        
     }
     static async BuyTransaction(){

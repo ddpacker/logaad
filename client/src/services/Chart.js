@@ -17,13 +17,15 @@ class Chart extends Component {
     }
 
     did_render(){
-        const type = this.props.type?this.props.type:"full";
-        this.full = (type==="full");
-        this.canvas = document.getElementById(this.id);
-        this.ctx = this.canvas.getContext("2d");
-        this.data = this.props.data;
-        if(this.data)this.drawStock(this.data);
-        //else if(this.data != "")this.bringStock();
+        if(this.props.data){
+            const type = this.props.type?this.props.type:"full";
+            this.full = (type==="full");
+            this.canvas = document.getElementById(this.id);
+            this.ctx = this.canvas.getContext("2d");
+            this.data = this.props.data;
+            this.drawStock(this.data);
+            //else if(this.data != "")this.bringStock();
+        }
     }
     
     /*bringStock(){
@@ -47,7 +49,7 @@ class Chart extends Component {
         const posyini = this.props.height - (this.full ? ratespace : 0);
         const finalwidth = this.props.width - (this.full ? posxini+10 : 0);
         const finalheight = posyini - (this.full ? 10 : 0);
-        const color = data.quote.change>0 ? "rgba(0, 255, 0, " : "rgba(255, 0, 0, ";
+        const color = data.quote.change<differencials.lastValue ? "rgba(92, 184, 92, " : "rgba(217, 83, 79, ";
         const xspace = this.roundStock(finalwidth / (data.chart.length-1));
         let posx = posxini;
         let tooltips = [];
@@ -57,9 +59,8 @@ class Chart extends Component {
             this.ctx.rect(posxini, posyini-finalheight, finalwidth, finalheight);
             this.ctx.stroke();
         }
-        //console.log("INITIAL>>", differencials.high, differencials.low, differencials.difference);
         this.ctx.beginPath();
-        this.ctx.strokeStyle = color+"1)";
+        this.ctx.strokeStyle = this.full?color+"1)":"#FFFFFF";
         this.ctx.lineWidth = 2;
         for (let i=0; i<data.chart.length; i++){
             const average = this.roundStock((data.chart[i].high+data.chart[i].low)/2);
@@ -79,13 +80,13 @@ class Chart extends Component {
             this.ctx.lineTo(posx, posyini);
             this.ctx.lineTo(posxini, posyini);
             this.ctx.fill();
-            this.quoteStock(data.quote, {x:posxini, y:posyini-finalheight, width:finalwidth, height:finalheight}, differencials);
+            this.quoteStock({x:posxini, y:posyini-finalheight, width:finalwidth, height:finalheight}, differencials);
             this.showTooltips(tooltips, xspace, posxini, posyini);
             this.canvas.onmousemove = this.movingMouse.bind(this);
         }
     }
 
-    quoteStock(quote, coord, differencials){
+    quoteStock(coord, differencials){
         const space = Math.round(coord.height/4);
         this.ctx.lineWidth = .3;
         this.ctx.fillStyle = this.ctx.strokeStyle = this.elementsColor;
@@ -93,7 +94,7 @@ class Chart extends Component {
         this.ctx.textAlign = "right";
         for (let i=0; i<5; i++){
             this.ctx.beginPath();
-            if(i==4)this.ctx.lineWidth = 2;
+            if(i===4)this.ctx.lineWidth = 2;
             this.ctx.moveTo(coord.x-10, coord.y+space*i);
             this.ctx.lineTo(coord.x+coord.width+4, coord.y+space*i);
             this.ctx.stroke();
@@ -118,7 +119,7 @@ class Chart extends Component {
     movingMouse(event){
         //console.log(event, this.canvas);
         const index = Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace);
-        if(index!=this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
+        if(index!==this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
             const tooltipWidth = 160;
             let posx = this.tooltip_props.data[index].posx-tooltipWidth/2;
             let posy = 0;
@@ -167,12 +168,14 @@ class Chart extends Component {
     findLowHigh(data){
         let low = 0;
         let high = 0;
+        let lastValue = 0;
         const margin = .0005;
         for (let i=0; i<data.length; i++){
             if(data[i].low>0 && data[i].high>0){
                 let average = (data[i].low+data[i].high)/2;
                 if(average<low || !low)low = average;
                 if(average>high || !high)high = average;
+                lastValue = average;
             }else {
                 data.splice(i, 1);
                 i --;
@@ -181,7 +184,7 @@ class Chart extends Component {
         low *= 1-margin;
         high *= 1+margin;
         let difference = high-low;
-        return {low:this.roundStock(low, "floor"), high:this.roundStock(high, "ceil"), difference:this.roundStock(difference, "ceil")};
+        return {low:this.roundStock(low, "floor"), high:this.roundStock(high, "ceil"), difference:this.roundStock(difference, "ceil"), lastValue:lastValue};
     }
     
     roundStock(value, method="round", roundNum=100){

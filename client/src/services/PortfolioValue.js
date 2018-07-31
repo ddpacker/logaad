@@ -17,27 +17,41 @@ class PortfolioValue {
         for (let i in stocks){
             symbols += (symbols?",":"")+i;
         }
-        const path = "https://api.iextrading.com/1.0/stock/market/batch?symbols="+symbols+"&types=chart&range=1d&last=1&chartLast=5";
+        const path = "https://api.iextrading.com/1.0/stock/market/batch?symbols="+symbols+"&types=chart,ohlc&range=1d&last=1&chartLast=5";
         fetch(path, {method: "get"}).then(function(response){
             response.json().then(function(data) {
                 let obj = {
                     totalEquity: 0, 
-                    tickers: []//{}
+                    tickers: [],//{}
+                    unweightedChange: 0,
+                    totalShares: 0,
+                    totalChange: 0
+
                 };
-                console.log(this.portfolio);
+                var unweightedChange = 0;
+                var totalShares = 0;
                 for (let i in data){
                     if(data[i] && data[i].chart && data[i].chart.length){
                         const stock = i.toLowerCase();
                         const chart = this.verifyData(data[i].chart, 4);
+                        const open = data[i].ohlc.open.price;
+                        const current = Math.round(chart.average*100)/100;
                         const stockEquity = chart.average * stocks[stock];
+                        const stockUnweighted = (((current - open) / open) * 100)
+                        const stockChange = stockUnweighted * stocks[stock]
                         const ticker = /*obj.tickers[stock] = */{
                             tickerName: stock,
-                            tickerValue: Math.round(chart.average*100)/100, 
-                            stockEquity: Math.round(stockEquity*100)/100
+                            tickerValue: current,
+                            stockEquity: Math.round(stockEquity*100)/100,
+                            shares: stocks[stock],
+                            percentChange: stockUnweighted.toFixed(3)
                         };
                         obj.tickers.push(ticker);
                         obj.totalEquity += stockEquity;
+                        unweightedChange += +stockChange.toFixed(3);
+                        totalShares += stocks[stock]
                     }
+                    obj.totalChange = unweightedChange / totalShares
                 }
                 obj.tickers.sort(this.compare);
                 obj.totalEquity = Math.round(obj.totalEquity*100)/100;

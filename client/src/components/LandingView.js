@@ -26,7 +26,7 @@ class LandingView extends Component {
                     <div className="col-sm-1">
                     </div>
                     <div className="col-sm-10">
-                        <div className="jumbotron">
+                        <div className="jumbotron" id="landingJumbotron">
                             <div className="row">
                                 <div className="col-xl-4 text-center">
                                     <img className="mx-auto my-0 d-block" src={require('../img/logo.svg')} style={{ width : "20vw" }}/>

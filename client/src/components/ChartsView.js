@@ -36,6 +36,7 @@ class ChartsView extends Component {
     }*/
 
     render (){
+        console.log(this.state.pzza_month);
         return (
             <div>
                 <button onClick={this.changeView.bind(this)}>change</button>

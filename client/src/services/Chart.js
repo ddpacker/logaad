@@ -93,7 +93,7 @@ class Chart extends Component {
         this.ctx.textAlign = "right";
         for (let i=0; i<5; i++){
             this.ctx.beginPath();
-            if(i==4)this.ctx.lineWidth = 2;
+            if(i===4)this.ctx.lineWidth = 2;
             this.ctx.moveTo(coord.x-10, coord.y+space*i);
             this.ctx.lineTo(coord.x+coord.width+4, coord.y+space*i);
             this.ctx.stroke();
@@ -118,7 +118,7 @@ class Chart extends Component {
     movingMouse(event){
         //console.log(event, this.canvas);
         const index = Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace);
-        if(index!=this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
+        if(index!==this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
             const tooltipWidth = 160;
             let posx = this.tooltip_props.data[index].posx-tooltipWidth/2;
             let posy = 0;

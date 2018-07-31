@@ -137,7 +137,6 @@ class Search extends Component {
           x[i].parentNode.removeChild(x[i]);
         }
       }*/
-      //console.log(x);
       return null;
     }
     /*execute a function when someone clicks in the document:*/

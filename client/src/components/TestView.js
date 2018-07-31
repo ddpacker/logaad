@@ -34,7 +34,6 @@ class TestView extends Component {
     }
     render() {
         console.log(this.state.data);
-        console.log(this.ticker);
         return(
             <div className="container">
                 {this.state.portfolio

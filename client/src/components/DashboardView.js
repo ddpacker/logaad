@@ -13,12 +13,14 @@ class DashboardView extends Component {
         this.state = {
             token: "",
             ticker: "fb",
-            wallet: 150.26
+            wallet: 150.26,
+            portList: {iq:5, msft:1}
+            
         };
     }
     componentWillMount() {
         TickerSwap.subscribeSwap(this.setTicker.bind(this));
-        PortfolioValue.suscribe({iq: 5, msft: 1}, this.bringPortfolio.bind(this));
+        PortfolioValue.suscribe(this.state.portList, this.bringPortfolio.bind(this));
         this.setState({ token: this.props.token });
     }
     setTicker(response) {

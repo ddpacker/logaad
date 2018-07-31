@@ -65,7 +65,7 @@ class PortfolioComponent extends Component {
                                             <span><small>{ticker.tickerName.toUpperCase()} </small><br/><span className="badge badge-dark badge-pill">{ticker.shares} Shares</span></span>
                                             <Chart width="100" height="50" data={this.state[ticker.tickerName+"_month"]} type="simple"/>                                        
                                             {this.state.isActive === ticker.tickerName
-                                                ? <span><small>Total Equity: </small><h5>${ticker.stockEquity}</h5></span>
+                                                ? <span><small>Total Equity: </small><h6>${ticker.stockEquity}</h6></span>
                                                 : <span><small>${ticker.tickerValue}</small><br/><span className="badge badge-dark badge-pill">{ticker.percentChange}%</span></span>
                                             }
                                     </div>

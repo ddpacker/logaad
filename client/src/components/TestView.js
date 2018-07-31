@@ -34,6 +34,7 @@ class TestView extends Component {
     }
     render() {
         console.log(this.state.data);
+        console.log(this.ticker);
         return(
             <div className="container">
                 {this.state.portfolio
@@ -44,7 +45,7 @@ class TestView extends Component {
                                 :   "jumbotron my-5 text-center text-light bg-dark"
                             }>
                             <small>Total Equity</small>
-                            <h2 className="display-5">${this.state.portfolio.totalEquity} USD</h2>
+                            <h2 className="display-5">${(this.state.portfolio.totalEquity).toFixed(2)} USD</h2>
                             <small>Cash on Hand</small>
                             <h2 className="display-5">${this.state.wallet} USD</h2>
                             <hr/>
@@ -53,7 +54,7 @@ class TestView extends Component {
                             className={this.state.portfolio.totalChange >= 0
                                 ? "display-4 text-success"
                                 : "display-4 text-danger"
-                            }>${(this.state.wallet) + (this.state.portfolio.totalEquity)} USD</h1>
+                            }>${(this.state.wallet + this.state.portfolio.totalEquity).toFixed(2)} USD</h1>
                             <small>Today's Change</small>
                             <h2 className="display-5">{this.state.portfolio.totalChange}%</h2>
                         </div>

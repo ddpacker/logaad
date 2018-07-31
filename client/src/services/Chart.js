@@ -17,7 +17,7 @@ class Chart extends Component {
     }
 
     did_render(){
-        if(this.props.data){
+        if(this.props.data && this.canvas){
             const type = this.props.type?this.props.type:"full";
             this.full = (type==="full");
             this.canvas = document.getElementById(this.id);

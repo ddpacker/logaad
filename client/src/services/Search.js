@@ -49,7 +49,7 @@ class Search extends Component {
       a = document.createElement("DIV");
       a.setAttribute("id", "autocomplete-list");
       a.setAttribute("class", "list-group");
-      a.setAttribute("style", "position: absolute");
+      a.setAttribute("style", "position: absolute; z-index: 100");
       /*append the DIV element as a child of the autocomplete container:*/
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
@@ -137,7 +137,7 @@ class Search extends Component {
           x[i].parentNode.removeChild(x[i]);
         }
       }*/
-      console.log(x);
+      //console.log(x);
       return null;
     }
     /*execute a function when someone clicks in the document:*/

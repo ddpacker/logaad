@@ -9,7 +9,6 @@ class Chart extends Component {
     }
 
     render () {
-        //this.id = this.props.stock+this.props.width+this.props.height;
         setTimeout(this.did_render.bind(this), 100);
         return (
             <canvas width={this.props.width} height={this.props.height} id={this.id}></canvas>
@@ -17,7 +16,7 @@ class Chart extends Component {
     }
 
     did_render(){
-        if(this.props.data && this.canvas){
+        if(this.props.data && document.getElementById(this.id)){
             const type = this.props.type?this.props.type:"full";
             this.full = (type==="full");
             this.canvas = document.getElementById(this.id);
@@ -103,30 +102,31 @@ class Chart extends Component {
     }
 
     showTooltips(data, xspace, posx, posy){
-        this.tooltip_props = {data:data, xspace:xspace, posxini:posx, posyini:posy, posx:0};
-        const interm = Math.floor(data.length/4.5);
-        this.ctx.beginPath();
-        this.ctx.fillStyle = this.elementsColor;
-        this.ctx.textAlign = "left";
-        for (let i=0; i<5; i++){
-            const posxdef = posx+interm*i*xspace;
-            this.ctx.arc(posxdef, posy+2, 3, 0, 360);
-            this.ctx.fillText(data[interm*i].label, posxdef, posy+20);
+        if(data.length){
+            this.tooltip_props = {data:data, xspace:xspace, posxini:posx, posyini:posy, posx:0};
+            const interm = Math.floor(data.length/4.5);
+            this.ctx.beginPath();
+            this.ctx.fillStyle = this.elementsColor;
+            this.ctx.textAlign = "left";
+            for (let i=0; i<5; i++){
+                const posxdef = posx+interm*i*xspace;
+                this.ctx.arc(posxdef, posy+2, 3, 0, 360);
+                this.ctx.fillText(data[interm*i].label, posxdef, posy+20);
+            }
+            this.ctx.fill();
         }
-        this.ctx.fill();
     }
 
     movingMouse(event){
         //console.log(event, this.canvas);
-        const index = Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace);
-        if(index!==this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
+        const index = this.tooltip_props?Math.round((event.layerX-this.tooltip_props.posxini)/this.tooltip_props.xspace):-1;
+        if(index>-1 && index!==this.tooltip_props.index && index>=0 && index<this.tooltip_props.data.length){
             const tooltipWidth = 160;
             let posx = this.tooltip_props.data[index].posx-tooltipWidth/2;
             let posy = 0;
             if(posx < 0)posx += tooltipWidth/2;
             else if(posx+tooltipWidth > this.canvas.width)posx -= tooltipWidth/2;
             if(posy+30 > this.tooltip_props.data[index].posy)posy = this.tooltip_props.posyini-30;
-            //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.drawStock(this.data);
             this.movingTooltip(index, posx, posy, tooltipWidth);
         }

@@ -7,18 +7,35 @@ class TransactionModule extends Component {
         super(props);
         this.state = { 
                     username : '',
+                    ownedShares : 4,
                     stock : '',
                     amount: '',
-                    price: ''
+                    price: '',
+                    quantity: 0,
+                    wallet: 150,
+                    isWatched: false
                 };
         this.handleBuy = this.handleBuy.bind(this);
         this.BuySale = this.BuySale.bind(this);
         this.handleSell = this.handleSell.bind(this);
+        this.handleQuantity = this.handleQuantity.bind(this);
+        this.handleWatch = this.handleWatch.bind(this);
         
     };
 
+    handleQuantity(event) {
+        this.setState({quantity:event.target.value});
+    }
+
+    handleWatch(event) {
+        this.setState({isWatched:!this.state.isWatched});
+    }
+
     handleBuy(state){
-        console.log("State info " + state);
+        console.log("State info " + this.state.wallet);
+        if ((this.state.quantity * this.props.data.quote.latestPrice) > (this.state.wallet)) {
+            this.setState({message: "Too Expensive"})
+        }
         console.log("Handle Buy", this);
         this.BuySale("omar","INTC",250,50,"B").then(res=>{
             console.log(res);
@@ -83,42 +100,77 @@ class TransactionModule extends Component {
     }
 
     render() {
+        console.log(this.props.data);
         return(
             <div className="card" id="transaction">
-                <div id="collapseBuy" class="collapse" data-parent="#transaction">
-                    <div class="card-body" >                        
-                        THIS IS BUY
+                <div id="collapseBuy" className="collapse collapseTransaction" data-parent="#transaction">
+                    <div className="card-header bg-dark text-light text-center">
+                        Confirm Your Purchase of {this.props.data.quote.symbol}
+                    </div>
+                    <div className="card-body text-center">
+                        <div className="input-group mx-auto">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">${this.props.data.quote.latestPrice} x </span>
+                            </div>
+                            <input type="number" min="1" step="1" max={(this.state.wallet / this.props.data.quote.latestPrice)} onChange={this.handleQuantity} class="form-control" value={this.innerHTML} placeholder="Amount of Shares"></input>
+                            <div className="input-group-append">
+                                <span className="input-group-text"> = ${Number(this.props.data.quote.latestPrice * this.state.quantity).toFixed(2)}</span>
+                                <button className="btn btn-success" onClick={this.handleBuy} data-toggle="alert" data-target="#buy">Buy</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div id="collapseSell" class="collapse" data-parent="#transaction">
-                    <div class="card-body" >
-                    THIS IS SELL
+                <div id="collapseSell" class="collapse collapseTransaction" data-parent="#transaction">
+                    <div className="card-header bg-dark text-light text-center">
+                        Confirm Your Sale of {this.props.data.quote.symbol}
                     </div>
-                </div>
-                <div id="collapseWatch" class="collapse" data-parent="#transaction">
-                    <div class="card-body">
-                        THIS IS WATCH
+                    <div className="card-body text-center">
+                        You currently own {this.state.ownedShares} shares of {this.props.data.quote.symbol}...
+                        <div className="input-group mx-auto">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">${this.props.data.quote.latestPrice} x </span>
+                            </div>
+                            <input type="number" min="1" step="1" max={this.state.ownedShares} onChange={this.handleQuantity} class="form-control" value={this.innerHTML} placeholder="Amount of Shares"></input>
+                            <div className="input-group-append">
+                                <span className="input-group-text"> = ${Number(this.props.data.quote.latestPrice * this.state.quantity).toFixed(2)}</span>
+                                <button className="btn btn-danger" onClick={this.handleBuy} data-toggle="alert" data-target="#buy">Sell</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="card-footer">
                     <div className="row text-center">
                         <div className="col-sm-4">
-                            <button className="btn btn-success btn-block" data-toggle="collapse" data-target="#collapseBuy" onClick={this.handleBuy}>
+                            <button className="btn btn-success btn-block" data-toggle="collapse" data-target="#collapseBuy">
                                 <i className="material-icons my-0 py-0">attach_money</i>
                                 <h5>BUY</h5>
                             </button>
                         </div>
+                        {this.state.ownedShares > 0
+                            ?   <div className="col-sm-4">
+                                    <button className="btn btn-danger btn-block" data-toggle="collapse" data-target="#collapseSell">
+                                        <i className="material-icons my-0 py-0">money_off</i>
+                                        <h5>SELL</h5>
+                                    </button>
+                                </div>
+                            : <div className="col-sm-4">
+                                    <button className="btn btn-disabled btn-block">
+                                        <i className="material-icons my-0 py-0">money_off</i>
+                                        <h5>SELL</h5>
+                                    </button>
+                                </div>
+                        }
                         <div className="col-sm-4">
-                            <button className="btn btn-danger btn-block" data-toggle="collapse" data-target="#collapseSell" onClick={this.handleSell}>
-                                <i className="material-icons my-0 py-0">money_off</i>
-                                <h5>SELL</h5>
-                            </button>
-                        </div>
-                        <div className="col-sm-4">
-                            <button className="btn btn-info btn-block" data-toggle="collapse" data-target="#collapseWatch">
-                                <i className="material-icons my-0 py-0">remove_red_eye</i>
-                                <h5>WATCH</h5>
-                            </button>
+                            {!this.state.isWatched
+                                ?   <button onClick={this.handleWatch} className="btn btn-info btn-block">
+                                        <i className="material-icons my-0 py-0">remove_red_eye</i>
+                                        <h5>WATCH</h5>
+                                    </button>
+                                :   <button onClick={this.handleWatch} className="btn btn-warning btn-block">
+                                        <i className="material-icons my-0 py-0">remove</i>
+                                        <h5>unWATCH</h5>
+                                    </button>
+                            }
                         </div>
                     </div>
                 </div>

@@ -5,11 +5,11 @@ class Chart extends Component {
     constructor(){
         super();
         this.elementsColor = "#CCCCCC";
-        this.id = Math.round(Math.random*1000000);
+        this.id = Math.round(Math.random()*1000000);
     }
 
     render () {
-        this.id = this.props.stock+this.props.width+this.props.height;
+        //this.id = this.props.stock+this.props.width+this.props.height;
         setTimeout(this.did_render.bind(this), 100);
         return (
             <canvas width={this.props.width} height={this.props.height} id={this.id}></canvas>

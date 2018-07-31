@@ -40,8 +40,8 @@ class TestView extends Component {
                 ?   <div>
                         <div className=
                             {this.state.portfolio.totalChange >= 0 
-                                ?   "jumbotron my-5 text-center text-success bg-dark"
-                                :   "jumbotron my-5 text-center text-danger bg-light"
+                                ?   "jumbotron my-5 text-center text-light bg-dark"
+                                :   "jumbotron my-5 text-center text-light bg-dark"
                             }>
                             <small>Total Equity</small>
                             <h2 className="display-5">${this.state.portfolio.totalEquity} USD</h2>
@@ -49,7 +49,11 @@ class TestView extends Component {
                             <h2 className="display-5">${this.state.wallet} USD</h2>
                             <hr/>
                             <small>Portfolio Value</small>
-                            <h1 className="display-4">${(this.state.wallet) + (this.state.portfolio.totalEquity)} USD</h1>
+                            <h1 
+                            className={this.state.portfolio.totalChange >= 0
+                                ? "display-4 text-success"
+                                : "display-4 text-danger"
+                            }>${(this.state.wallet) + (this.state.portfolio.totalEquity)} USD</h1>
                             <small>Today's Change</small>
                             <h2 className="display-5">{this.state.portfolio.totalChange}%</h2>
                         </div>

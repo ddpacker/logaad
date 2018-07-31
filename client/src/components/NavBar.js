@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Search from "../services/Search";
+import TestView from '../components/TestView';
 
 class NavBar extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class NavBar extends Component {
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <div className="mx-auto order-0">
           <a className="navbar-brand">
-            <img src={require("../img/brand.png")} style={{ height: "50px" }} />
+            <img src={require("../img/brand.png")} style={{ height: "50px" }} alt="Brand" />
           </a>
           <button
             className="navbar-toggler"
@@ -25,7 +26,7 @@ class NavBar extends Component {
           </button>
         </div>
         <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
-          {this.props.token == "" ? (
+          {this.props.token === "" ? (
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <button
@@ -50,6 +51,7 @@ class NavBar extends Component {
             </ul>
           ) : (
             <div className="navbar-nav ml-auto">
+              
               <Search className="nav-item" />
             </div>
           )}

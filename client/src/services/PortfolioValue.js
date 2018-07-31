@@ -51,8 +51,8 @@ class PortfolioValue {
                         unweightedChange += +stockChange.toFixed(3);
                         totalShares += stocks[stock]
                     }
-                    obj.totalChange = unweightedChange / totalShares
                 }
+                obj.totalChange = (unweightedChange / totalShares).toFixed(3);
                 obj.tickers.sort(this.compare);
                 obj.totalEquity = Math.round(obj.totalEquity*100)/100;
                 EventBus.eventEmitter.emit("portfolio", obj);

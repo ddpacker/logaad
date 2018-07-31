@@ -58,7 +58,7 @@ class Search extends Component {
         //console.log(arr);
         /*check if the item starts with the same letters as the text field value:*/
         if (
-          arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()
+          arr[i].name.substr(0, val.length).toUpperCase() === val.toUpperCase()
         ) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("a");
@@ -89,20 +89,20 @@ class Search extends Component {
     inp.addEventListener("keydown", function (e) {
       var x = document.getElementById(this.id + "autocomplete-list");
       if (x) x = x.getElementsByTagName("a");
-      if (e.keyCode == 40) {
+      if (e.keyCode === 40) {
         /*If the arrow DOWN key is pressed,
           increase the currentFocus variable:*/
         currentFocus++;
         /*and and make the current item more visible:*/
         addActive(x);
-      } else if (e.keyCode == 38) {
+      } else if (e.keyCode === 38) {
         //up
         /*If the arrow UP key is pressed,
           decrease the currentFocus variable:*/
         currentFocus--;
         /*and and make the current item more visible:*/
         addActive(x);
-      } else if (e.keyCode == 13) {
+      } else if (e.keyCode === 13) {
         /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
         if (currentFocus > -1) {
@@ -127,7 +127,7 @@ class Search extends Component {
     function closeAllLists(elmnt) {
       var x = document.getElementsByClassName("list-group");
       for (var i = 0; i < x.length; i++) {
-        if (elmnt != x[i] && elmnt != inp) {
+        if (elmnt !== x[i] && elmnt !== inp) {
           x[i].parentNode.removeChild(x[i]);
         }
       }
@@ -145,7 +145,7 @@ class Search extends Component {
         response.json().then(
           function (data) {
             for (let i = 0; i < data.length; i++) {
-              if (data[i].type == "cs" && data[i].isEnabled)
+              if (data[i].type === "cs" && data[i].isEnabled)
                 this.tickers.push(data[i]);
             }
           }.bind(this)

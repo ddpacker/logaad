@@ -18,16 +18,8 @@ class DashboardView extends Component {
   render() {
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-dark"
-          data-toggle="modal"
-          data-target="#stock"
-        >
-          stock
-        </button>
         <div className="row" />
-        <StockModal ticker={this.state.ticker} />
+        <StockModal token={this.props.token} ticker={this.state.ticker} />
         {this.state.token}
         DASHBOARD VIEW
       </div>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TickerSwap from "./TickerSwap";
 
 class Search extends Component {
   constructor() {
@@ -8,6 +9,8 @@ class Search extends Component {
     //this.autocomplete();
   }
 
+
+
   render() {
     //console.log(this.tickers);
     setTimeout(this.autocomplete, 100, "myInput", this.tickers);
@@ -16,13 +19,9 @@ class Search extends Component {
         <div className="autocomplete">
           <input
             id="myInput"
-            className="autocomplete"
+            className="autocomplete form-control"
             type="search"
             placeholder="Search"
-          />
-          <img
-            src={require("../img/searchIcon.png")}
-            style={{ height: "35px" }}
           />
         </div>
       </form>
@@ -48,7 +47,7 @@ class Search extends Component {
       currentFocus = -1;
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
-      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("id", "autocomplete-list");
       a.setAttribute("class", "list-group");
       a.setAttribute("style", "position: absolute");
       /*append the DIV element as a child of the autocomplete container:*/
@@ -62,9 +61,11 @@ class Search extends Component {
         ) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("a");
-          b.setAttribute("id", this.id + "autocomplete");
+          b.setAttribute("id", "autocomplete");
           b.setAttribute("class", "list-group-item list-group-item-action");
           b.setAttribute("href", "#");
+          b.setAttribute("data-toggle", "modal");
+          b.setAttribute("data-target","#stock");
 
           /*make the matching letters bold:*/
           b.innerHTML =
@@ -75,8 +76,10 @@ class Search extends Component {
           /*execute a function when someone clicks on the item value (a element):*/
           b.addEventListener("click", function (e) {
             /*insert the value for the autocomplete text field:*/
-            inp.value = this.getElementsByTagName("input")[0].value;
+            //inp.value = this.getElementsByTagName("input")[0].value;
             console.log(this.getElementsByTagName("input")[0].value);
+            inp.value = (this.getElementsByTagName("input")[0].value);
+            TickerSwap.emitSwap(inp.value);
             /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
             closeAllLists();
@@ -84,7 +87,7 @@ class Search extends Component {
           a.appendChild(b);
         }
       }
-    });
+    })
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function (e) {
       var x = document.getElementById(this.id + "autocomplete-list");
@@ -125,12 +128,17 @@ class Search extends Component {
       }
     }
     function closeAllLists(elmnt) {
-      var x = document.getElementsByClassName("list-group");
-      for (var i = 0; i < x.length; i++) {
+      var x = document.getElementById("autocomplete-list");
+      if (x && elmnt !== x && elmnt !== inp) {
+        x.parentNode.removeChild(x);
+      }
+      /*for (var i = 0; i < x.length; i++) {
         if (elmnt !== x[i] && elmnt !== inp) {
           x[i].parentNode.removeChild(x[i]);
         }
-      }
+      }*/
+      console.log(x);
+      return null;
     }
     /*execute a function when someone clicks in the document:*/
     document.addEventListener("click", function (e) {

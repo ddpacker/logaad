@@ -34,25 +34,25 @@ class PortfolioValue {
                         const chart = this.verifyData(data[i].chart, 4);
                         const open = data[i].ohlc.open.price;
                         const current = chart.average.toFixed(2);
-                        const stockEquity = chart.average * stocks[stock];
+                        const stockEquity = Number((chart.average * stocks[stock]).toFixed(2));
                         const stockUnweighted = (((current - open) / open) * 100);
                         const stockChange = stockUnweighted * stocks[stock];
                         const ticker = {
                             tickerName: stock,
                             tickerValue: current,
-                            stockEquity: stockEquity.toFixed(2),
+                            stockEquity: +stockEquity.toFixed(2),
                             shares: stocks[stock],
-                            percentChange: stockUnweighted.toFixed(3)
+                            percentChange: +stockUnweighted.toFixed(3)
                         };
                         obj.tickers.push(ticker);
                         obj.totalEquity += stockEquity;
-                        unweightedChange += Number(stockChange.toFixed(3));
+                        unweightedChange += +stockChange.toFixed(3);
                         totalShares += stocks[stock];
                     }
                 }
                 obj.totalChange = (unweightedChange / totalShares).toFixed(3);
                 obj.tickers.sort(this.compare);
-                obj.totalEquity = obj.totalEquity.toFixed(2);
+                obj.totalEquity = Number(obj.totalEquity.toFixed(2));
                 EventBus.eventEmitter.emit("portfolio", obj);
             }.bind(this));
         }.bind(this));

@@ -14,6 +14,7 @@ const Routes = () => (
         <Switch>
             <Route exact path = '/' component = { LandingView }/>
             <Route exact path = '/test' component = { TestView }/>
+            <Route exact path = '/dashboard' component = { DashboardView}/>
             <Route component = { App404View }/>
         </Switch>
     </Router>

@@ -31,7 +31,7 @@ class NavBar extends Component {
               <li className="nav-item">
                 <button
                   type="button"
-                  className="btn btn-dark"
+                  className="btn btn-secondary"
                   data-toggle="modal"
                   data-target="#login"
                 >
@@ -41,7 +41,7 @@ class NavBar extends Component {
               <li className="nav-item">
                 <button
                   type="button"
-                  className="btn btn-dark"
+                  className="btn btn-secondary"
                   data-toggle="modal"
                   data-target="#register"
                 >

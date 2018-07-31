@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import LoginModal from "./landing/LoginModal";
 import EventBus from "../services/EventBus";
 import StockModal from "./dashboard/StockModal";
+import TestView from "./TestView";
 
 class DashboardView extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class DashboardView extends Component {
         <div className="row" />
         <StockModal token={this.props.token} ticker={this.state.ticker} />
         {this.state.token}
-        DASHBOARD VIEW
+        <TestView/>
       </div>
     );
   }

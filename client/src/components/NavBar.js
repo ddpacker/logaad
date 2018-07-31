@@ -51,7 +51,7 @@ class NavBar extends Component {
             </ul>
           ) : (
             <div className="navbar-nav ml-auto">
-              <TestView/>
+              
               <Search className="nav-item" />
             </div>
           )}

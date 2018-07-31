@@ -23,8 +23,6 @@ class PortfolioValue {
                 let obj = {
                     totalEquity: 0, 
                     tickers: [],//{}
-                    unweightedChange: 0,
-                    totalShares: 0,
                     totalChange: 0
 
                 };

@@ -5,22 +5,16 @@ import PortfolioValue from '../services/PortfolioValue';
 
 
 class ChartsView extends Component {
-    constructor(){
-        super();
-        this.state = {width: 400};
-        Tickers.suscribeTicker("pzza", "month", this.tickerUpdated.bind(this));
-        Tickers.suscribeTicker("aapl", "day", this.tickerUpdated.bind(this));
-        PortfolioValue.suscribe({aapl:15, pzza:35, fb:8}, this.bringPortfolio.bind(this));
+    constructor(props){
+        super(props);
+        var tickerToRender = `${this.props.ticker}_month`;
+        Tickers.suscribeTicker(this.props.ticker, "month", this.tickerUpdated.bind(this));
     }
 
     tickerUpdated(response){
         var obj = {};
         obj[response.id] = response.data;
         this.setState(obj);
-    }
-
-    bringPortfolio(response){
-        console.log("bringPortfolio", response);
     }
 
     /*bringTickers(){
@@ -36,19 +30,11 @@ class ChartsView extends Component {
     }*/
 
     render (){
-        console.log(this.state.pzza_month);
         return (
             <div>
-                <button onClick={this.changeView.bind(this)}>change</button>
-                <Chart width="200" height="100" data={this.state.pzza_month} type="simple"/>
-                <br/>
-                <Chart width={this.state.width} height="400"  data={this.state.aapl_day} />
+                <Chart width="100" height="50" data={this.tickerToRender} type="simple"/>
             </div>
         )
-    }
-    
-    changeView(){
-        this.setState({width:this.state.width+100});
     }
 }
 

@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import Tickers from '../../services/Tickers';
 import TickerSwap from '../../services/TickerSwap';
 import Chart from '../../services/Chart';
+import ChartsView from '../ChartsView';
 
 class PortfolioComponent extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {
             isActive: ""
         }
@@ -48,6 +50,7 @@ class PortfolioComponent extends Component {
                                             : 'list-group-item bg-danger text-light d-flex justify-content-between align-items-center'
                                         }>
                                             <span><small>{ticker.tickerName.toUpperCase()} </small><br/><span className="badge badge-dark badge-pill">{ticker.shares} Shares</span></span>
+                                            <ChartsView ticker={ticker.tickerName}/>
                                             {this.state.isActive === ticker.tickerName
                                                 ? <span><small>Total Equity: </small><h5>${ticker.stockEquity}</h5></span>
                                                 : <span><small>${ticker.tickerValue}</small><br/><span className="badge badge-dark badge-pill">{ticker.percentChange}%</span></span>

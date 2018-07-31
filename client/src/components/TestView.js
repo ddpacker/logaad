@@ -33,15 +33,15 @@ class TestView extends Component {
         this.setState({portfolio: response});
     }
     render() {
-        console.log(this.state.portfolio);
+        console.log(this.state.data);
         return(
             <div className="container">
                 {this.state.portfolio
                 ?   <div>
                         <div className=
                             {this.state.portfolio.totalChange >= 0 
-                                ?   "jumbotron my-5 text-center text-light bg-success"
-                                :   "jumbotron my-5 text-center text-light bg-danger"
+                                ?   "jumbotron my-5 text-center text-success bg-dark"
+                                :   "jumbotron my-5 text-center text-danger bg-light"
                             }>
                             <small>Total Equity</small>
                             <h2 className="display-5">${this.state.portfolio.totalEquity} USD</h2>

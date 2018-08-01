@@ -1,31 +1,87 @@
-import React, { Component } from "react";
-import LoginModal from "./landing/LoginModal";
-import EventBus from "../services/EventBus";
-import StockModal from "./dashboard/StockModal";
-import TestView from "./TestView";
+import React, { Component } from  'react';
+import StockModal from './dashboard/StockModal';
+import Tickers from '../services/Tickers';
+import PortfolioValue from '../services/PortfolioValue';
+import PortfolioComponent from './dashboard/PortfolioComponent';
+import TickerSwap from '../services/TickerSwap';
+import ChartsView from './ChartsView';
+import WatchlistComponent from './dashboard/WatchlistComponent';
 
 class DashboardView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token: ""
-    };
-  }
-
-  componentWillMount() {
-    this.setState({ token: this.props.token });
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="row" />
-        <StockModal token={this.props.token} ticker={this.state.ticker} />
-        {this.state.token}
-        <TestView/>
-      </div>
-    );
-  }
+    constructor() {
+        super();
+        this.state = {
+            token: "",
+            ticker: "fb",
+            wallet: 150.26,
+            portList: {iq:5, msft:1}
+            
+        };
+    }
+    componentWillMount() {
+        TickerSwap.subscribeSwap(this.setTicker.bind(this));
+        PortfolioValue.suscribe(this.state.portList, this.bringPortfolio.bind(this));
+        this.setState({ token: this.props.token });
+    }
+    setTicker(response) {
+        this.setState({ticker: response});
+        Tickers.suscribeTicker(response, "day", this.tickerUpdated.bind(this));
+    }
+    tickerUpdated(response){
+        var obj = {};
+        obj[response.id] = response.data;
+        this.setState(obj);
+        if(this.state.ticker+"_day" === response.id)this.setState({data: response.data});
+    }
+    bringPortfolio(response){
+        this.setState({portfolio: response});
+    }
+    render() {
+        console.log(this.state.ticker);
+        console.log(this.state.data);
+        return(
+            <div className="container">
+                {this.state.portfolio
+                ?   <div>
+                        <div className=
+                            {this.state.portfolio.totalChange >= 0 
+                                ?   "jumbotron my-5 text-center text-light bg-dark"
+                                :   "jumbotron my-5 text-center text-light bg-dark"
+                            }>
+                            <small>Total Equity</small>
+                            <h2 className="display-5">${(this.state.portfolio.totalEquity).toFixed(2)} USD</h2>
+                            <small>Cash on Hand</small>
+                            <h2 className="display-5">${this.state.wallet} USD</h2>
+                            <hr/>
+                            <small>Portfolio Value</small>
+                            <h1 
+                            className={this.state.portfolio.totalChange >= 0
+                                ? "display-4 text-success"
+                                : "display-4 text-danger"
+                            }>${(this.state.wallet + this.state.portfolio.totalEquity).toFixed(2)} USD</h1>
+                            <small>Today's Change</small>
+                            <h2 className="display-5">{this.state.portfolio.totalChange}%</h2>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <PortfolioComponent portfolio={this.state.portfolio}/>
+                            </div>
+                            <div className="col-sm-6">
+                                <WatchlistComponent watclist={this.state.watchlist}/>
+                            </div>
+                        </div>
+                    </div>
+                :   <div className="jumbotron my-5 text-center">
+                        <h1 className="display-4">Welcome to Logaad</h1>
+                        <p className="lead">Use the search bar above to get started!</p> 
+                    </div>
+                }
+                
+                <StockModal data={this.state.data}/>
+            </div>
+        
+        )
+    }
 }
 
 export default DashboardView;

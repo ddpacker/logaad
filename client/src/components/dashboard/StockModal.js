@@ -28,7 +28,7 @@ class StockModal extends Component {
     }
   }
   render() {
-    const value = this.props.data?PortfolioValue.verifyData(this.props.data.chart, 10):null;
+    const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, 10):null;
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
         {this.props.data ?
@@ -39,7 +39,7 @@ class StockModal extends Component {
             </div>
             <div class="modal-body">
               <div className="text-center">
-                <h1 className={(this.props.data.quote.changePercent > 0) ? 'text-success' : 'text-danger'}>${(Math.round(value.average * 100)) / 100} USD</h1>
+                <h1 className={(this.props.data.quote.changePercent > 0) ? 'text-success' : 'text-danger'}>${Number((value.average)).toFixed(2)} USD</h1>
                 <Chart width={(this.state.width)} height={(this.state.width * 0.6)} data={this.props.data} type="full"/>
               </div>
               {this.props.data.quote.isOwned
@@ -72,15 +72,15 @@ class StockModal extends Component {
                 <div class="col-sm-6">
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{this.props.data.quote.open}</small>
+                      <small>{Number(this.props.data.quote.open).toFixed(2)}</small>
                       <span className="badge badge-pill badge-secondary">Open</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{this.props.data.quote.high}</small>
+                      <small>{Number(this.props.data.quote.high).toFixed(2)}</small>
                       <span className="badge badge-pill badge-secondary">Today's High</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{this.props.data.quote.low}</small>
+                      <small>{Number(this.props.data.quote.low).toFixed(2)}</small>
                       <span className="badge badge-pill badge-secondary">Today's Low</span>
                     </li>
                   </ul>
@@ -89,21 +89,21 @@ class StockModal extends Component {
                   <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span className="badge badge-pill badge-secondary">Volume</span>
-                        <small>{this.props.data.quote.latestVolume}</small>
+                        <small>{this.props.data.quote.latestVolume.toLocaleString()}</small>
                       </li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span className="badge badge-pill badge-secondary">52 Week High</span>
-                        <small>{this.props.data.quote.week52High}</small>
+                        <small>{Number(this.props.data.quote.week52High).toFixed(2)}</small>
                       </li>
                       <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span className="badge badge-pill badge-secondary">52 Week Low</span>
-                        <small>{this.props.data.quote.week52Low}</small>
+                        <small>{Number(this.props.data.quote.week52Low).toFixed(2)}</small>
                       </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <TransactionModule token={this.props.token}/>
+            <TransactionModule token={this.props.token} data={this.props.data}/>
           </div>
         </div>
         : null}

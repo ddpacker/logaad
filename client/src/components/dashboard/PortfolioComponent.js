@@ -3,6 +3,7 @@ import Tickers from '../../services/Tickers';
 import TickerSwap from '../../services/TickerSwap';
 import Chart from '../../services/Chart';
 import ChartsView from '../ChartsView';
+import EventBus from '../../services/EventBus';
 
 class PortfolioComponent extends Component {
     constructor(props) {

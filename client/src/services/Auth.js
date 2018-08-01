@@ -38,11 +38,11 @@ class Auth {
         this.login(username,password).then(res=>{
             //console.log(res);
             AccessGranted = res.LoginInfo.exist
-            authToken = JSON.stringify(res.LoginInfo.userid);
             //Name = res.LoginInfo.name;
             //Mail = res.LoginInfo.email;
             if (AccessGranted === 1) {
                 //console.log("Logged In");
+                authToken = res.LoginInfo.userid;
                 EventBus.eventEmitter.emit('authenticated', authToken);
             }
         });
@@ -101,6 +101,7 @@ class Auth {
         
        return content;
     }
+    
     
 
 }

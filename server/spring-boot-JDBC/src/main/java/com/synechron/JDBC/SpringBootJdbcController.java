@@ -643,15 +643,19 @@ IN  in_userid varchar(20)
 		while(rs.next()) {
 			//System.out.println("User " + rs.getString(1) + " Stock " + rs.getString(2));
 			RecordSet.add(Json.createObjectBuilder()
-							.add("stockid", rs.getString(1))
-							.add("amount", String.valueOf(rs.getInt(2))));
+					
+					
+							.add(rs.getString(1),rs.getInt(2)))
+								/*	String.valueOf(rs.getInt(2)))) */
+							;
+							
 		}
 		rs.close();
 		cstmt.close();
 		con.close();
 
 		JsonObject Message = Json.createObjectBuilder()
-				.add("Stocks by User", RecordSet.build())
+				.add("Stocks_by_User", RecordSet.build())
 				.build();
 
 		return Message.toString();
@@ -798,6 +802,78 @@ IN  in_userid varchar(20)
 		return Message.toString();
 	}
 
+	
+	//Wallet
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/WalletByUser", method = RequestMethod.POST)
+	public String WalletByUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
+    	/*
+SET @RESULT = -1;
+CALL sp_wallet('a',@RESULT);
+SELECT @RESULT AS WALLET;
+
+
+IN  in_userid varchar(20)
+   	 {
+		"in_userid":"omar"
+	 }
+   	 */
+		//Validate fields
+		if(!isValidLength(payload.get("in_userid").toString(),20) 
+		) {
+			JsonObject  WalletObject = Json.createObjectBuilder()
+					.add("userid", payload.get("in_userid").toString())					
+					.build();
+
+			JsonObject Message = Json.createObjectBuilder()
+					.add("Wallet by User", WalletObject)
+					.add("Message", "Operation Failed: Lenght not valid in inputs")
+					.build();
+
+
+			return Message.toString();
+		}
+		//Step 1
+		//System.out.println("UserID " + payload.get("in_userid") + " stockid " + payload.get("in_stockid"));
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		}
+		catch(ClassNotFoundException e) {
+			System.out.println("Driver Class Not Found");
+		}
+		//Step 2
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/stocksdb?useSSL=false", "logaad", "password");
+		//Step 3
+		CallableStatement cstmt = null;
+		//Step 4
+
+		cstmt = con.prepareCall("{call sp_wallet(?,?)}");
+		cstmt.setString(1, payload.get("in_userid").toString());
+		
+		cstmt.registerOutParameter(2, Types.DECIMAL); //output parameter is second parameter type integer
+		cstmt.execute();
+		float pcount = cstmt.getFloat(2);
+		cstmt.close();
+		con.close();
+
+		//String outputMessage = "Operation Failed";
+		
+
+		JsonObject  WalletObject = Json.createObjectBuilder()
+				.add("userid", payload.get("in_userid").toString())
+				.add("wallet", pcount)				
+				.build();
+
+		JsonObject Message = Json.createObjectBuilder()
+				.add("Wallet_by_User", WalletObject)
+				//.add("Message", outputMessage)
+				.build();
+
+		return Message.toString();
+	}
+
+	
     /*
     @RequestMapping("/CreateUser")  
     public String index1(){  

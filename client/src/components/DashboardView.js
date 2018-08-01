@@ -6,25 +6,45 @@ import PortfolioComponent from './dashboard/PortfolioComponent';
 import TickerSwap from '../services/TickerSwap';
 import ChartsView from './ChartsView';
 import WatchlistComponent from './dashboard/WatchlistComponent';
+import Stocks from '../services/Stocks';
 
 class DashboardView extends Component {
-    constructor() {
-        super();
+    
+    constructor(props) {
+        super(props);
+
         this.state = {
-            token: "",
-            ticker: "fb",
+            ticker: "",
+            tickerQty: 0,
             wallet: 150.26,
-            portList: {iq:5, msft:1}
-            
         };
     }
     componentWillMount() {
+        Stocks.userPortfolio(this.props.token).then(res=>{
+            this.setArray(res.Stocks_by_User, "portList");
+        });
         TickerSwap.subscribeSwap(this.setTicker.bind(this));
+    }
+    setArray(response, value) {
+        let portList = {};
+        for (let i=0; i<response.length; i++){
+            for (let j in response[i]){
+                portList[j.toLowerCase()] = response[i][j];
+            }
+        }
+        let obj = {};
+        obj[value] = portList;
+        this.setState(obj);
         PortfolioValue.suscribe(this.state.portList, this.bringPortfolio.bind(this));
-        this.setState({ token: this.props.token });
     }
     setTicker(response) {
         this.setState({ticker: response});
+        console.log(response);
+        if ((this.state.portList).hasOwnProperty((response).toLowerCase())) {
+            this.setState({tickerQty: this.state.portList[response]})
+        } else {
+            console.log("Not Owned")
+        }
         Tickers.suscribeTicker(response, "day", this.tickerUpdated.bind(this));
     }
     tickerUpdated(response){
@@ -34,14 +54,13 @@ class DashboardView extends Component {
         if(this.state.ticker+"_day" === response.id)this.setState({data: response.data});
     }
     bringPortfolio(response){
+        //console.log("bringPortfolio", response)
         this.setState({portfolio: response});
     }
     render() {
-        console.log(this.state.ticker);
-        console.log(this.state.data);
         return(
             <div className="container">
-                {this.state.portfolio
+                {this.state.portfolio && this.state.portList
                 ?   <div>
                         <div className=
                             {this.state.portfolio.totalChange >= 0 
@@ -76,8 +95,7 @@ class DashboardView extends Component {
                         <p className="lead">Use the search bar above to get started!</p> 
                     </div>
                 }
-                
-                <StockModal data={this.state.data}/>
+                <StockModal  data={this.state.data} portList={this.state.portList} username={this.props.token} quantity={this.state.tickerQty} />
             </div>
         
         )

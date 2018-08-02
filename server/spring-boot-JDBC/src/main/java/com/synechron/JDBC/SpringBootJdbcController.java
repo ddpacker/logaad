@@ -236,7 +236,7 @@ public class SpringBootJdbcController {
 		}
 
 		//Step 1
-		//System.out.println("UserID " + payload.get("in_userid") + " stockid " + payload.get("in_stockid") + " amount " + payload.get("in_amount") + " type " + payload.get("in_type") + " price " + payload.get("in_price"));
+		System.out.println("UserID " + payload.get("in_userid") + " stockid " + payload.get("in_stockid") + " amount " + payload.get("in_amount") + " type " + payload.get("in_type") + " price " + payload.get("in_price"));
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -253,7 +253,8 @@ public class SpringBootJdbcController {
 		cstmt = con.prepareCall("{call sp_Buy_Sell_Stocks(?,?,?,?,?,?)}");
 		cstmt.setString(1, payload.get("in_userid").toString());
 		cstmt.setString(2, payload.get("in_stockid").toString());
-		cstmt.setInt(3, Integer.parseInt(payload.get("in_amount").toString()));
+		cstmt.setInt(3,  Integer.parseInt(payload.get("in_amount").toString()));
+		System.out.println("Amount " + payload.get("in_amount").toString());
 		cstmt.setString(4, payload.get("in_type").toString());
 		cstmt.setFloat(5, Float.parseFloat(payload.get("in_price").toString()));
 		cstmt.registerOutParameter(6, Types.INTEGER); //output parameter is second parameter type integer
@@ -888,5 +889,75 @@ IN  in_userid varchar(20)
         return"data inserted Successfully";  
     }
     */
+	
+	//List WatchList by User
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/ListWatchListByUser", method = RequestMethod.POST)
+	public String ListWatchListByUser(@RequestBody  Map<String,Object> payload) throws InstantiationException, IllegalAccessException, SQLException {
+    	/*
+
+CALL sp_ListWatchList('a');
+	
+		
+IN  in_userid varchar(20)
+   	 {
+		"in_userid":"omar"
+	 }
+   	 */
+		//Validate fields
+		if(!isValidLength(payload.get("in_userid").toString(),20)
+		) {
+
+			JsonObject  StocksByUserObject = Json.createObjectBuilder()
+					.add("userid", payload.get("in_userid").toString())
+					.build();
+
+			JsonObject Message = Json.createObjectBuilder()
+					.add("List WatchList by User", StocksByUserObject)
+					.add("Message", "Operation Failed: Lenght not valid in inputs")
+					.build();
+
+			return Message.toString();
+		}
+		//Step 1
+		//System.out.println("UserID " + payload.get("in_userid"));
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		}
+		catch(ClassNotFoundException e) {
+			System.out.println("Driver Class Not Found");
+		}
+		//Step 2
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/stocksdb?useSSL=false", "logaad", "password");
+		//Step 3
+		CallableStatement cstmt = null;
+		//Step 4
+
+		cstmt = con.prepareCall("{call sp_ListWatchList(?)}");
+		cstmt.setString(1, payload.get("in_userid").toString());
+		ResultSet rs;
+		rs = cstmt.executeQuery();
+		JsonArrayBuilder RecordSet = Json.createArrayBuilder();
+		while(rs.next()) {
+			//System.out.println("User " + rs.getString(1) + " Stock " + rs.getString(2));
+			RecordSet.add(Json.createObjectBuilder()
+					
+					
+							.add(rs.getString(1),"0"))
+								/*	String.valueOf(rs.getInt(2)))) */
+							;
+							
+		}
+		rs.close();
+		cstmt.close();
+		con.close();
+
+		JsonObject Message = Json.createObjectBuilder()
+				.add("WatchList_by_User", RecordSet.build())
+				.build();
+
+		return Message.toString();
+	}
+	
 
 }  

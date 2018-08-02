@@ -18,8 +18,6 @@ class StockModal extends Component {
   }
   componentWillMount() {
     this.setState({quantity : this.props.quantity});
-    
-
   }
   componentDidMount() {
     this.updateWidth();
@@ -48,7 +46,7 @@ class StockModal extends Component {
     const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, this.chartLength(this.props.data.chart)/*10*/):null;
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
-        <test/>
+        
         {this.props.data ?
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
@@ -121,7 +119,7 @@ class StockModal extends Component {
                 </div>
               </div>
             </div>
-            <TransactionModule token={this.props.token} quantity={this.props.quantity} data={this.props.data} wallet={this.props.wallet} username={this.props.username}/>
+            <TransactionModule token={this.props.token} quantity={this.props.quantity} isWatched={this.props.isWatched} data={this.props.data} wallet={this.props.wallet} username={this.props.username}/>
           </div>
         </div>
         : null}

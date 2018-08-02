@@ -17,6 +17,9 @@ class PortfolioComponent extends Component {
         this.handleHoverOut = this.handleHoverOut.bind(this);
         this.tickerUpdated = this.tickerUpdated.bind(this);
 
+        
+    }
+    componentWillMount() {
         if(this.props.portfolio && this.props.portfolio.tickers){
             this.props.portfolio.tickers.map(function(ticker){
                 Tickers.suscribeTicker(ticker.tickerName, "month", this.tickerUpdated);

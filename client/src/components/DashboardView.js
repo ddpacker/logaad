@@ -7,6 +7,8 @@ import TickerSwap from '../services/TickerSwap';
 import ChartsView from './ChartsView';
 import WatchlistComponent from './dashboard/WatchlistComponent';
 import Stocks from '../services/Stocks';
+import EventBus from '../services/EventBus';
+import WatchlistValue from '../services/WatchlistValue';
 
 class DashboardView extends Component {
     
@@ -15,19 +17,41 @@ class DashboardView extends Component {
 
         this.state = {
             ticker: "",
-            wallet: 0,
+            wallet: 0
         };
         this.findQuantity = this.findQuantity.bind(this);
         this.getWallet = this.getWallet.bind(this);
+        this.refreshOnTransaction = this.refreshOnTransaction.bind(this);
+        this.userStocksData = this.userStocksData.bind(this);
+        this.findWatchStatus = this.findWatchStatus.bind(this);
+        EventBus.getEventEmitter().on('refresh', this.refreshOnTransaction);
+
     }
     componentWillMount() {
-        Stocks.userPortfolio(this.props.token).then(res=>{
-            this.setArray(res.Stocks_by_User, "portList");
-        });
+        this.userStocksData();
         TickerSwap.subscribeSwap(this.setTicker.bind(this));
         this.getWallet();
     }
-    setArray(response, value) {
+    userStocksData() {
+        Stocks.userPortfolio(this.props.token).then(res=>{
+            if (res.Stocks_by_User.length > 0) {
+                this.setPortfolio(res.Stocks_by_User, "portList");
+            }
+        });
+        Stocks.userWatchlist(this.props.token).then(res=>{
+            if (res.WatchList_by_User.length > 0) {
+                this.setWatchlist(res.WatchList_by_User, "watchList");
+            } else {
+                this.setState({watchlist: false});
+            }
+        });
+    }
+    refreshOnTransaction() {
+        this.userStocksData();
+        this.getWallet();
+    }
+    setPortfolio(response, value) {
+        console.log(value, response);
         let portList = {};
         for (let i=0; i<response.length; i++){
             for (let j in response[i]){
@@ -39,6 +63,19 @@ class DashboardView extends Component {
         this.setState(obj);
         PortfolioValue.suscribe(this.state.portList, this.bringPortfolio.bind(this));
     }
+    setWatchlist(response, value) {
+        console.log(value, response);
+        let watchList = {};
+        for (let i=0; i<response.length; i++){
+            for (let j in response[i]){
+                watchList[j.toLowerCase()] = response[i][j];
+            }
+        }
+        let obj = {};
+        obj[value] = watchList;
+        this.setState(obj);
+        WatchlistValue.suscribe(this.state.watchList, this.bringWatchlist.bind(this));
+    }
     setTicker(response) {
         this.setState({ticker: response});
         /*console.log(response);
@@ -47,19 +84,37 @@ class DashboardView extends Component {
         } else {
             console.log("Not Owned")
         }*/
+        this.findWatchStatus(response);
         this.findQuantity(response);
         Tickers.suscribeTicker(response, "day", this.tickerUpdated.bind(this));
     }
-    
+    findWatchStatus(response) {
+        var watchFlag;
+        if (this.state.watchlist) {
+            this.state.watchlist.tickers.map(ticker=>{
+                if (response === ticker.tickerName) {
+                    this.setState({isWatched:true});
+                    watchFlag = true;
+                    console.log("we are here");
+                }
+            }); 
+        }
+        if (!watchFlag){
+            console.log("Here");
+            this.setState({isWatched:false});
+        }
+    }
     findQuantity(response) {
-        var flag = false;
-        this.state.portfolio.tickers.map(ticker=>{
-            if (response === ticker.tickerName) {
-                this.setState({quantity:ticker.shares});
-                flag = true;
-            };
-        }); 
-        if (!flag){
+        var quantityFlag = false;
+        if (this.state.portfolio) {
+            this.state.portfolio.tickers.map(ticker=>{
+                if (response === ticker.tickerName) {
+                    this.setState({quantity:ticker.shares});
+                    quantityFlag = true;
+                };
+            }); 
+        }
+        if (!quantityFlag){
             this.setState({quantity:0});
         }
     }
@@ -78,7 +133,11 @@ class DashboardView extends Component {
     bringPortfolio(response){
         this.setState({portfolio: response});
     }
+    bringWatchlist(response) {
+        this.setState({watchlist: response});
+    }
     render() {
+        console.log("Dash", this.state.isWatched);
         return(
             <div className="container">
                 {this.state.portfolio && this.state.portList
@@ -91,7 +150,7 @@ class DashboardView extends Component {
                             <small>Total Equity</small>
                             <h2 className="display-5">${(this.state.portfolio.totalEquity).toFixed(2)} USD</h2>
                             <small>Cash on Hand</small>
-                            <h2 className="display-5">${this.state.wallet} USD</h2>
+                            <h2 className="display-5">${(this.state.wallet).toFixed(2)} USD</h2>
                             <hr/>
                             <small>Portfolio Value</small>
                             <h1 
@@ -100,14 +159,14 @@ class DashboardView extends Component {
                                 : "display-4 text-danger"
                             }>${(this.state.wallet + this.state.portfolio.totalEquity).toFixed(2)} USD</h1>
                             <small>Today's Change</small>
-                            <h2 className="display-5">{this.state.portfolio.totalChange}%</h2>
+                            <h2 className="display-5">{Number.isNaN(this.state.portfolio.totalChange) ? this.state.portfolio.totalChange : 0} %</h2>
                         </div>
                         <div className="row">
                             <div className="col-sm-6">
                                 <PortfolioComponent portfolio={this.state.portfolio}/>
                             </div>
                             <div className="col-sm-6">
-                                <WatchlistComponent watclist={this.state.watchlist}/>
+                                <WatchlistComponent watchlist={this.state.watchlist}/>
                             </div>
                         </div>
                     </div>
@@ -116,7 +175,7 @@ class DashboardView extends Component {
                         <p className="lead">Use the search bar above to get started!</p> 
                     </div>
                 }
-                <StockModal  data={this.state.data} quantity={this.state.quantity} wallet={this.state.wallet} username={this.props.token}/>
+                <StockModal  data={this.state.data} quantity={this.state.quantity} wallet={this.state.wallet} isWatched={this.state.isWatched} username={this.props.token}/>
             </div>
         
         )

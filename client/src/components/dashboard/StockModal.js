@@ -3,22 +3,28 @@ import TransactionModule from './TransactionModal';
 import Chart from '../../services/Chart';
 import PortfolioValue from "../../services/PortfolioValue";
 import EventBus from "../../services/EventBus";
+import Stocks from "../../services/Stocks";
 
 class StockModal extends Component {
   constructor(props) {
     super(props);
     this.state = { 
       width : 600,
-      quantity: 0
+      quantity: 0,
+      wallet: 0
     }
     this.updateWidth = this.updateWidth.bind(this);
+    this.chartLength = this.chartLength.bind(this);
   }
   componentWillMount() {
-    this.setState({quantity : this.props.quantity})
+    this.setState({quantity : this.props.quantity});
+    
+
   }
   componentDidMount() {
     this.updateWidth();
     window.addEventListener('resize', this.updateWidth);
+    
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWidth);
@@ -32,8 +38,14 @@ class StockModal extends Component {
       this.setState({width: (window.innerWidth * 0.8)})
     }
   }
+  chartLength(array){
+    if(array.length>10){
+      return 10
+    }
+    return (array.length-1);
+  }
   render() {
-    const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, 10):null;
+    const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, this.chartLength(this.props.data.chart)/*10*/):null;
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
         <test/>
@@ -109,7 +121,7 @@ class StockModal extends Component {
                 </div>
               </div>
             </div>
-            <TransactionModule token={this.props.token} data={this.props.data} username={this.props.username} quantity={this.props.quantity}/>
+            <TransactionModule token={this.props.token} quantity={this.props.quantity} data={this.props.data} wallet={this.props.wallet} username={this.props.username}/>
           </div>
         </div>
         : null}

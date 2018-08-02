@@ -15,15 +15,17 @@ class DashboardView extends Component {
 
         this.state = {
             ticker: "",
-            tickerQty: 0,
-            wallet: 150.26,
+            wallet: 0,
         };
+        this.findQuantity = this.findQuantity.bind(this);
+        this.getWallet = this.getWallet.bind(this);
     }
     componentWillMount() {
         Stocks.userPortfolio(this.props.token).then(res=>{
             this.setArray(res.Stocks_by_User, "portList");
         });
         TickerSwap.subscribeSwap(this.setTicker.bind(this));
+        this.getWallet();
     }
     setArray(response, value) {
         let portList = {};
@@ -39,13 +41,33 @@ class DashboardView extends Component {
     }
     setTicker(response) {
         this.setState({ticker: response});
-        console.log(response);
+        /*console.log(response);
         if ((this.state.portList).hasOwnProperty((response).toLowerCase())) {
             this.setState({tickerQty: this.state.portList[response]})
         } else {
             console.log("Not Owned")
-        }
+        }*/
+        this.findQuantity(response);
         Tickers.suscribeTicker(response, "day", this.tickerUpdated.bind(this));
+    }
+    
+    findQuantity(response) {
+        var flag = false;
+        this.state.portfolio.tickers.map(ticker=>{
+            if (response === ticker.tickerName) {
+                this.setState({quantity:ticker.shares});
+                flag = true;
+            };
+        }); 
+        if (!flag){
+            this.setState({quantity:0});
+        }
+    }
+    getWallet(){
+        Stocks.wallet(this.props.token).then(res=>{
+            this.setState({wallet: res.Wallet_by_User.wallet })
+            
+        });
     }
     tickerUpdated(response){
         var obj = {};
@@ -54,7 +76,6 @@ class DashboardView extends Component {
         if(this.state.ticker+"_day" === response.id)this.setState({data: response.data});
     }
     bringPortfolio(response){
-        //console.log("bringPortfolio", response)
         this.setState({portfolio: response});
     }
     render() {
@@ -95,7 +116,7 @@ class DashboardView extends Component {
                         <p className="lead">Use the search bar above to get started!</p> 
                     </div>
                 }
-                <StockModal  data={this.state.data} portList={this.state.portList} username={this.props.token} quantity={this.state.tickerQty} />
+                <StockModal  data={this.state.data} quantity={this.state.quantity} wallet={this.state.wallet} username={this.props.token}/>
             </div>
         
         )

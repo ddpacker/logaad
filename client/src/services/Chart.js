@@ -48,7 +48,8 @@ class Chart extends Component {
         const posyini = this.props.height - (this.full ? ratespace : 0);
         const finalwidth = this.props.width - (this.full ? posxini+10 : 0);
         const finalheight = posyini - (this.full ? 10 : 0);
-        const color = data.quote.change<differencials.lastValue ? "rgba(92, 184, 92, " : "rgba(217, 83, 79, ";
+        console.log("drawstock", data.quote.close, data.quote.latestPrice);
+        const color = data.quote.open<data.quote.latestPrice ? "rgba(92, 184, 92, " : "rgba(217, 83, 79, ";
         const xspace = this.roundStock(finalwidth / (data.chart.length-1));
         let posx = posxini;
         let tooltips = [];
@@ -62,7 +63,7 @@ class Chart extends Component {
         this.ctx.strokeStyle = this.full?color+"1)":"#FFFFFF";
         this.ctx.lineWidth = 2;
         for (let i=0; i<data.chart.length; i++){
-            const average = this.roundStock((data.chart[i].high+data.chart[i].low)/2);
+            const average = i<data.chart.length-1?this.roundStock((data.chart[i].high+data.chart[i].low)/2):data.quote.latestPrice;
             const porc = (average-differencials.low) / differencials.difference;
             const posy = Math.round(posyini-(porc*finalheight));
             this.ctx[i ? "lineTo" : "moveTo"](posx, posy);

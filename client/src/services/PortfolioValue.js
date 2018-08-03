@@ -24,14 +24,13 @@ class PortfolioValue {
                     totalEquity: 0, 
                     tickers: [],
                     totalChange: 0
-
                 };
                 let unweightedChange = 0;
                 let totalShares = 0;
                 for (let i in data){
                     if(data[i] && data[i].chart && data[i].chart.length){
                         const stock = i.toLowerCase();
-                        const chart = this.verifyData(data[i].chart, 4);
+                        const chart = this.verifyData(data[i].chart, (data[i].chart.length>=4?4:data[i].chart.length-1));
                         const open = data[i].ohlc.open.price;
                         const current = chart.average.toFixed(2);
                         const stockEquity = Number((chart.average * stocks[stock]).toFixed(2));
@@ -64,7 +63,8 @@ class PortfolioValue {
     }
 
     static verifyData(data, num) {
-        if (data[num].average>0 || !num)return data[num];
+        console.log("verifyData", data[num])
+        if ((data[num].average && data[num].average>0) || !num)return data[num];
         else return this.verifyData(data, num-1);
     }
 }

@@ -1,15 +1,34 @@
 import React, { Component } from "react";
 import Search from "../services/Search";
 import TestView from '../components/TestView';
+import EventBus from '../services/EventBus';
+import Stocks from '../services/Stocks';
 
 class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: ""
-    };
+      wallet: 0
+    }
+    //this.getUserWallet = this.getUserWallet.bind(this);
+    this.refreshOnTransaction = this.refreshOnTransaction.bind(this);
+    EventBus.getEventEmitter().on('refresh', this.refreshOnTransaction);
+  }
+  refreshOnTransaction() {
+    if (this.props.token !== "") {
+      this.getUserWallet();
+    }
+  }
+  getUserWallet() {
+    Stocks.wallet(this.props.token).then(res=>{
+      console.log("get user wallet")
+      this.setState({wallet: res.Wallet_by_User.wallet });
+    });
   }
   render() {
+    if (this.props.token && !this.state.wallet) {
+      this.getUserWallet();
+    }
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <div className="mx-auto order-0">
@@ -51,8 +70,18 @@ class NavBar extends Component {
             </ul>
           ) : (
             <div className="navbar-nav ml-auto">
-              
-              <Search className="nav-item" />
+              <div className="dropdown">
+                <button className="btn btn-secondary mx-2 py-1 my-0" data-toggle="dropdown">
+                  <i className="material-icons my-0 py-0">person_outline</i>
+                </button>
+                <div className="dropdown-menu">
+                  <small className="dropdown-item disabled">Username: {this.props.token}</small>
+                  <small className="dropdown-item disabled">Wallet: ${(this.state.wallet).toFixed(2)}</small>
+                </div>
+              </div>
+              <span>
+                <Search className="nav-item" />
+              </span>
             </div>
           )}
         </div>

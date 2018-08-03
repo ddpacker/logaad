@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import { Redirect } from 'react-router-dom';
 
+
+
 import NavBar from './components/NavBar';
 import EventBus from './services/EventBus';
 import DashboardView from './components/DashboardView';
@@ -13,7 +15,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      token : "aToken"
+      token : ""
     }
    
   }

@@ -21,7 +21,12 @@ class LoginModal extends Component {
         });
     }
     handleSubmission() {
-        Auth.getToken(this.state);
+        if(this.state.username==="" || this.state.password===""){
+            alert("Check for empty username or password");
+        }else{
+            Auth.getToken(this.state);
+        }
+        
     }
     pressEnter(event) {
         if (event.keyCode === 13) {

@@ -30,7 +30,12 @@ class RegisterModal extends Component {
     + " Password " + this.state.password 
     + " UserName " + this.state.userName
     );*/
-        Auth.createUser(this.state);
+        if(this.state.firstName==="" || this.state.lastName==="" || this.state.email==="" || this.state.password==="" || this.state.userName===""){
+            alert("Check for missing information");
+        }else{
+            Auth.createUser(this.state);
+        }
+        
     }
     pressEnter(event) {
         if (event.keyCode === 13) {
@@ -54,26 +59,26 @@ class RegisterModal extends Component {
                                 <div className="col-sm-12">
                                     <div className="form-group">
                                         <label htmlFor="email">Please enter your email address</label>
-                                        <input className="form-control" type="email" value={this.state.email} name="email" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Email"/>
+                                        <input className="form-control" type="email" value={this.state.email} name="email" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Email" required/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="userName">Please enter your username</label>
-                                        <input className="form-control" type="text" value={this.state.userName} name="userName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Username"/>
+                                        <input className="form-control" type="text" value={this.state.userName} name="userName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Username" required/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="password">Please enter your password</label>
-                                        <input className="form-control" type="password" value={this.state.password} name="password" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Password"/>
+                                        <input className="form-control" type="password" value={this.state.password} name="password" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Password" required/>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-6">
                                     <label htmlFor="firstName">First Name</label>
-                                    <input className="form-control" type="text" value={this.state.firstName} name="firstName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="First Name"/>
+                                    <input className="form-control" type="text" value={this.state.firstName} name="firstName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="First Name" required/>
                                 </div>
                                 <div className="col-sm-6">
                                     <label htmlFor="lastName">Last Name</label>
-                                    <input className="form-control" type="text" value={this.state.lastName} name="lastName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Last Name"/>
+                                    <input className="form-control" type="text" value={this.state.lastName} name="lastName" onChange={this.handleForm} onKeyUp={this.pressEnter} placeholder="Last Name" required/>
                                 </div>
                             </div>
                         </div>

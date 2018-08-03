@@ -64,23 +64,11 @@ class PortfolioValue {
     }
 
     static verifyData(data, num) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/dunebuggy
         //console.log("data ",data,"num",num);
         const index = data.length>=num?num:data.length-1;
         if (!data.length)return null;
         else if (data[index].average>0 || !index)return data[index];
         else return this.verifyData(data, index-1);
-<<<<<<< HEAD
-=======
-        console.log("verifyData", data[num])
-        if ((data[num].average && data[num].average>0) || !num)return data[num];
-        else return this.verifyData(data, num-1);
->>>>>>> 53453fd934c2d2ada62cae6a7884ae8c26177ff6
-=======
->>>>>>> origin/dunebuggy
     }
 }
 export default PortfolioValue;

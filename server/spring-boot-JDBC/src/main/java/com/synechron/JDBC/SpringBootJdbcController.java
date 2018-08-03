@@ -4,19 +4,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-<<<<<<< HEAD
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-=======
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
->>>>>>> origin/dunebuggy
-
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.nio.charset.StandardCharsets;
@@ -972,8 +967,6 @@ IN  in_userid varchar(20)
 
 		return Message.toString();
 	}
-	
-<<<<<<< HEAD
 	public void ReadConfigFile() {
 		String filePath = "c:/temp/config.properties";
 		Properties prop = new Properties();
@@ -997,9 +990,6 @@ IN  in_userid varchar(20)
 		}
 	}
 	
-	
-	
-=======
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value = "/SaveTickers", method = RequestMethod.POST)
 	public String SaveTickers(@RequestBody  String payload){
@@ -1034,6 +1024,5 @@ IN  in_userid varchar(20)
         } 
         return response;
 	}
->>>>>>> origin/dunebuggy
 
 }  

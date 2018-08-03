@@ -42,7 +42,7 @@ class StockModal extends Component {
     return (array.length-1);
   }
   render() {
-    const value = (this.props.data && this.props.data.chart)?PortfolioValue.verifyData(this.props.data.chart, this.chartLength(this.props.data.chart)/*10*/):null;
+    const value = (this.props.data && this.props.data.chart && this.props.data.chart.length)?PortfolioValue.verifyData(this.props.data.chart, 10):{average:0};
     return (
       <div className="modal" id="stock" tabIndex="-1" role="dialog">
         

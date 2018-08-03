@@ -4,9 +4,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+<<<<<<< HEAD
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+=======
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+>>>>>>> origin/dunebuggy
 
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -964,6 +973,7 @@ IN  in_userid varchar(20)
 		return Message.toString();
 	}
 	
+<<<<<<< HEAD
 	public void ReadConfigFile() {
 		String filePath = "c:/temp/config.properties";
 		Properties prop = new Properties();
@@ -989,5 +999,41 @@ IN  in_userid varchar(20)
 	
 	
 	
+=======
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/SaveTickers", method = RequestMethod.POST)
+	public String SaveTickers(@RequestBody  String payload){
+		String fileName = "tickers.json";
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(payload);
+            bufferedWriter.close();
+        }catch(IOException ex) {
+            System.out.println("Error writing to file '"+ fileName + "'");
+        } 
+		return "{\"result\":\"success\"}";
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/Tickers", method = RequestMethod.GET)
+	public String Tickers(){
+		String fileName = "tickers.json";
+		String response = "";
+		String line = null;
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+                response += line;
+            }
+            bufferedReader.close();      
+        }catch(Exception ex) {
+            System.out.println("Error reading file '" + fileName + "'");                  
+        } 
+        return response;
+	}
+>>>>>>> origin/dunebuggy
 
 }  

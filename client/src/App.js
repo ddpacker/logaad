@@ -10,8 +10,9 @@ import DashboardView from './components/DashboardView';
 import LandingView from './components/LandingView';
 import Routes from './MainRouter';
 
-class App extends Component {
 
+class App extends Component {
+  
   constructor() {
     super();
     this.state = {
@@ -28,6 +29,8 @@ class App extends Component {
   }
 
   render() {
+    
+   // console.log("API = "+APIURL);
     return (
       <div>
         <NavBar token={this.state.token}/>

@@ -1,5 +1,6 @@
 import EventBus from "./EventBus";
 
+const APIURL = `${process.env.REACT_APP_API}`;
 class Auth {
     static async createUser(state) {
         //console.log(state);
@@ -57,7 +58,7 @@ class Auth {
 
     static async RegisterUser(userid,name,email,password){
         //console.log("I was here");
-        const rawResponse = await fetch('http://localhost:8090/CreateUser', {
+        const rawResponse = await fetch(APIURL + '/CreateUser', {
           method: 'POST',
           headers: {
             'Access-Control-Allow-Origin':'*',
@@ -85,7 +86,7 @@ class Auth {
     }
     static async login(username,password){    
         //console.log("This is my ip");
-        const rawResponse = await fetch('http://localhost:8090/LogIn', {
+        const rawResponse = await fetch(APIURL + '/LogIn', {
           method: 'POST',
           headers: {
             'Access-Control-Allow-Origin':'*',

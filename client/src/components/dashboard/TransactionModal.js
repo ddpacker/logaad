@@ -5,7 +5,7 @@ import EventBus from '../../services/EventBus';
 import TickerSwap from '../../services/TickerSwap';
 import DashboardView from '../DashboardView';
 
-
+const APIURL = `${process.env.REACT_APP_API}`;
 class TransactionModule extends Component {
     constructor(props) {
         super(props);
@@ -88,7 +88,7 @@ class TransactionModule extends Component {
     */
     async BuySale(username,stockid,amount,price,type){    
         //console.log("This is my ip");
-        const rawResponse = await fetch('http://localhost:8090/BuyOrSellStocks', {
+        const rawResponse = await fetch(APIURL + '/BuyOrSellStocks', {
           method: 'POST',
           headers: {
             'Access-Control-Allow-Origin':'*',
@@ -121,7 +121,7 @@ class TransactionModule extends Component {
     }
     async WatchListTran(username,stockid,type){    
         //console.log("This is my ip");
-        const rawResponse = await fetch('http://localhost:8090/AddRemoveWatchlist', {
+        const rawResponse = await fetch(APIURL + '/AddRemoveWatchlist', {
           method: 'POST',
           headers: {
             'Access-Control-Allow-Origin':'*',

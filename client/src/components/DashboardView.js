@@ -34,17 +34,20 @@ class DashboardView extends Component {
     }
     userStocksData() {
         Stocks.userPortfolio(this.props.token).then(res=>{
+            console.log(res.Stocks_by_User);
             if (res.Stocks_by_User.length > 0) {
                 this.setPortfolio(res.Stocks_by_User, "portList");
             } else {
-                this.setState({portfolio: false});
+                this.setState({portList: null});
+                this.setState({portfolio: null});
             }
         });
         Stocks.userWatchlist(this.props.token).then(res=>{
             if (res.WatchList_by_User.length > 0) {
                 this.setWatchlist(res.WatchList_by_User, "watchList");
             } else {
-                this.setState({watchlist: false});
+                this.setState({watchList: null});
+                this.setState({watchlist: null});
             }
         });
     }
@@ -63,7 +66,7 @@ class DashboardView extends Component {
         let obj = {};
         obj[value] = portList;
         this.setState(obj);
-        PortfolioValue.suscribe(this.state.portList, this.bringPortfolio.bind(this));
+        PortfolioValue.suscribe(portList, this.bringPortfolio.bind(this));
     }
     setWatchlist(response, value) {
         console.log(value, response);
@@ -76,7 +79,7 @@ class DashboardView extends Component {
         let obj = {};
         obj[value] = watchList;
         this.setState(obj);
-        WatchlistValue.suscribe(this.state.watchList, this.bringWatchlist.bind(this));
+        WatchlistValue.suscribe(watchList, this.bringWatchlist.bind(this));
     }
     setTicker(response) {
         this.setState({ticker: response});
@@ -103,7 +106,7 @@ class DashboardView extends Component {
         }
         if (!watchFlag){
             console.log("Here");
-            this.setState({isWatched:false});
+            this.setState({isWatched:null});
         }
     }
     findQuantity(response) {
@@ -117,7 +120,7 @@ class DashboardView extends Component {
             }); 
         }
         if (!quantityFlag){
-            this.setState({quantity:0});
+            this.setState({quantity:null});
         }
     }
     getWallet(){
@@ -139,7 +142,6 @@ class DashboardView extends Component {
         this.setState({watchlist: response});
     }
     render() {
-        console.log("Dash", this.state.isWatched);
         return(
             <div className="container">
                 {this.state.portfolio && this.state.portList || this.state.watchlist && this.state.watchList

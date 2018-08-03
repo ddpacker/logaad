@@ -1,8 +1,9 @@
+const APIURL = `${process.env.REACT_APP_API}`;
 class Stocks {
     static async userPortfolio(username){    
         //console.log("This is my ip");
         console.log("STOCKS" + username);
-        const rawResponse = await fetch('http://localhost:8090/ListStocksByUser', {
+        const rawResponse = await fetch(APIURL + '/ListStocksByUser', {
         method: 'POST',
         headers: {
             'Access-Control-Allow-Origin':'*',
@@ -22,7 +23,7 @@ class Stocks {
     static async userWatchlist(username){    
         //console.log("This is my ip");
         console.log("Watchlist" + username);
-        const rawResponse = await fetch('http://localhost:8090/ListWatchListByUser', {
+        const rawResponse = await fetch(APIURL + '/ListWatchListByUser', {
         method: 'POST',
         headers: {
             'Access-Control-Allow-Origin':'*',
@@ -40,7 +41,7 @@ class Stocks {
     }
     static async wallet(username){
         console.log("Wallet" + username);
-        const rawResponse = await fetch('http://localhost:8090/WalletByUser', {
+        const rawResponse = await fetch(APIURL + '/WalletByUser', {
         method: 'POST',
         headers: {
             'Access-Control-Allow-Origin':'*',

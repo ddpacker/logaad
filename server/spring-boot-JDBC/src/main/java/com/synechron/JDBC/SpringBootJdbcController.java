@@ -4,6 +4,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.nio.charset.StandardCharsets;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -958,6 +963,31 @@ IN  in_userid varchar(20)
 
 		return Message.toString();
 	}
+	
+	public void ReadConfigFile() {
+		String filePath = "c:/temp/config.properties";
+		Properties prop = new Properties();
+ 
+		try (InputStream inputStream = new FileInputStream(filePath)) {
+ 
+			// Loading the properties.
+			prop.load(inputStream);
+ 
+			// Getting properties 
+			String corurl = prop.getProperty("cors.url");
+			
+			
+			System.out.println("URL = " + corurl);
+			
+			
+		} catch (IOException ex) {
+			System.out.println("Problem occurs when reading file !");
+			ex.printStackTrace();
+			
+		}
+	}
+	
+	
 	
 
 }  

@@ -8,7 +8,6 @@ import EventBus from '../../services/EventBus';
 class PortfolioComponent extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             isActive: ""
         }

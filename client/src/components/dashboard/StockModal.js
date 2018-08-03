@@ -22,7 +22,6 @@ class StockModal extends Component {
   componentDidMount() {
     this.updateWidth();
     window.addEventListener('resize', this.updateWidth);
-    
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWidth);
@@ -58,22 +57,18 @@ class StockModal extends Component {
                 <h1 className={(this.props.data.quote.changePercent >= 0) ? 'text-success' : 'text-danger'}>${Number((value.average)).toFixed(2)} USD</h1>
                 <Chart width={(this.state.width)} height={(this.state.width * 0.6)} data={this.props.data} type="full"/>
               </div>
-              {this.state.ownerShip
+              {/*this.props.quantity > 0
                 ? <div className="row">
                     <div className="col-sm-2">
                     </div>
                     <div className="col-sm-8">
                     <ul className="list-group">
                     <li className="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{this.props.portList}</small>
+                      <small>{this.props.quantity}</small>
                       <span className="badge badge-pill badge-secondary">Shares</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{this.props.portList}</small>
-                      <span className="badge badge-pill badge-secondary">Average Price</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between align-items-center">
-                      <small>{(this.props.portList)}</small>
+                      <small>{(this.props.quantity * this.props.data.quote.latestPrice)}</small>
                       <span className="badge badge-pill badge-secondary">Total Equity</span>
                     </li>
                   </ul>
@@ -82,7 +77,7 @@ class StockModal extends Component {
                     </div>
                   </div>
                   : null
-              }
+              */}
               <br/>
               <div className="row">
                 <div className="col-sm-6">

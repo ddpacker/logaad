@@ -79,7 +79,7 @@ class Search extends Component {
             //inp.value = this.getElementsByTagName("input")[0].value;
             console.log(this.getElementsByTagName("input")[0].value);
             inp.value = (this.getElementsByTagName("input")[0].value);
-            TickerSwap.emitSwap(inp.value);
+            TickerSwap.emitSwap((inp.value).toLowerCase());
             /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
             closeAllLists();

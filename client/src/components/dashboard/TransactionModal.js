@@ -15,7 +15,8 @@ class TransactionModule extends Component {
                     price: '',
                     wallet: 0,
                     quantityOfSale: 0,
-                    isWatched: this.props.isWatched
+                    isWatched: this.props.isWatched,
+                    flag: false
                 };
         this.handleBuy = this.handleBuy.bind(this);
         this.BuySale = this.BuySale.bind(this);
@@ -23,8 +24,7 @@ class TransactionModule extends Component {
         this.handleQuantity = this.handleQuantity.bind(this);
         this.handleWatch = this.handleWatch.bind(this);
         this.refreshView = this.refreshView.bind(this);
-    };   
-
+    };
     handleQuantity(event) {
         this.setState({quantityOfSale:event.target.value});
     }
@@ -40,7 +40,9 @@ class TransactionModule extends Component {
         this.WatchListTran(this.props.username,this.props.data.quote.symbol,addOrRemove).then(res=>{
             console.log(addOrRemove);
             alert(res.Message);
-            this.setState({isWatched: this.props.isWatched});
+            if (res.Message === "Operation Succesful") {
+                this.setState({isWatched: !this.state.isWatched})
+            }
             this.refreshView();
         });
     }
@@ -148,7 +150,6 @@ class TransactionModule extends Component {
     }
 
     render() {
-        console.log("Watched", this.props.isWatched);
         return(
             <div className="card" id="transaction">
                 <div id="collapseBuy" className="collapse collapseTransaction" data-parent="#transaction">
@@ -164,7 +165,9 @@ class TransactionModule extends Component {
                             <input type="number" min="1" step="1" max={(this.props.wallet / this.props.data.quote.latestPrice)} onChange={this.handleQuantity} className="form-control" value={this.innerHTML} placeholder="Amount of Shares"></input>
                             <div className="input-group-append">
                                 <span className="input-group-text"> = ${Number(this.props.data.quote.latestPrice * this.state.quantityOfSale).toFixed(2)}</span>
-                                <button className="btn btn-success" onClick={this.handleBuy} data-toggle="collapse" data-target="#collapseBuy">Buy</button>
+                                <span data-toggle="modal" data-target="#stock">
+                                    <button className="btn btn-success" onClick={this.handleBuy} data-toggle="collapse" data-target="#collapseBuy">Buy</button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -182,7 +185,9 @@ class TransactionModule extends Component {
                             <input type="number" min="1" step="1" max={this.props.quantity} onChange={this.handleQuantity} className="form-control" value={this.innerHTML} placeholder="Amount of Shares"></input>
                             <div className="input-group-append">
                                 <span className="input-group-text"> = ${Number(this.props.data.quote.latestPrice * this.state.quantityOfSale).toFixed(2)}</span>
-                                <button className="btn btn-danger" onClick={this.handleSell} data-toggle="collapse" data-target="#collapseSell">Sell</button>
+                                <span data-toggle="modal" data-target="#stock">
+                                    <button className="btn btn-danger" onClick={this.handleSell} data-toggle="collapse" data-target="#collapseSell">Sell</button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -207,13 +212,22 @@ class TransactionModule extends Component {
                                 </div>
                         }
                         <div className="col-sm-4">
-                            {!this.state.isWatched
-                                ?   <button onClick={this.handleWatch} className="btn btn-info btn-block">
+                            {this.props.quantity !== 0 
+                                ?   <button className="btn btn-disabled btn-block">
                                         <i className="material-icons my-0 py-0">remove_red_eye</i>
                                     </button>
-                                :   <button onClick={this.handleWatch} className="btn btn-warning btn-block">
-                                        <i className="material-icons my-0 py-0">remove</i>
-                                    </button>
+
+                                :    !this.state.isWatched
+                                        ?   
+                                            <button onClick={this.handleWatch} className="btn btn-info btn-block">
+                                                <i className="material-icons my-0 py-0">remove_red_eye</i>
+                                            </button>
+                                            
+                                        :   
+                                            <button onClick={this.handleWatch} className="btn btn-warning btn-block">
+                                                <i className="material-icons my-0 py-0">remove</i>
+                                            </button>
+                                            
                             }
                         </div>
                     </div>

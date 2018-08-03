@@ -36,6 +36,8 @@ class DashboardView extends Component {
         Stocks.userPortfolio(this.props.token).then(res=>{
             if (res.Stocks_by_User.length > 0) {
                 this.setPortfolio(res.Stocks_by_User, "portList");
+            } else {
+                this.setState({portfolio: false});
             }
         });
         Stocks.userWatchlist(this.props.token).then(res=>{
@@ -140,27 +142,31 @@ class DashboardView extends Component {
         console.log("Dash", this.state.isWatched);
         return(
             <div className="container">
-                {this.state.portfolio && this.state.portList
+                {this.state.portfolio && this.state.portList || this.state.watchlist && this.state.watchList
                 ?   <div>
-                        <div className=
-                            {this.state.portfolio.totalChange >= 0 
-                                ?   "jumbotron my-5 text-center text-light bg-dark"
-                                :   "jumbotron my-5 text-center text-light bg-dark"
-                            }>
-                            <small>Total Equity</small>
-                            <h2 className="display-5">${(this.state.portfolio.totalEquity).toFixed(2)} USD</h2>
+                        {this.state.portfolio 
+                        ?   <div className="jumbotron my-5 text-center text-light bg-dark">
                             <small>Cash on Hand</small>
                             <h2 className="display-5">${(this.state.wallet).toFixed(2)} USD</h2>
-                            <hr/>
-                            <small>Portfolio Value</small>
-                            <h1 
-                            className={this.state.portfolio.totalChange >= 0
-                                ? "display-4 text-success"
-                                : "display-4 text-danger"
-                            }>${(this.state.wallet + this.state.portfolio.totalEquity).toFixed(2)} USD</h1>
-                            <small>Today's Change</small>
-                            <h2 className="display-5">{Number.isNaN(this.state.portfolio.totalChange) ? this.state.portfolio.totalChange : 0} %</h2>
-                        </div>
+                                <small>Total Equity</small>
+                                <h2 className="display-5">${(this.state.portfolio.totalEquity).toFixed(2)} USD</h2>
+                                <hr/>
+                                <small>Portfolio Value</small>
+                                <h1 
+                                className={this.state.portfolio.totalChange >= 0
+                                    ? "display-4 text-success"
+                                    : "display-4 text-danger"
+                                }>${(this.state.wallet + this.state.portfolio.totalEquity).toFixed(2)} USD</h1>
+                                <small>Today's Change</small>
+                                <h2 className="display-5">{Number.isNaN(this.state.portfolio.totalChange) ? this.state.portfolio.totalChange : 0} %</h2>
+                            </div>
+                        :   <div>
+                                <div className="jumbotron my-5 text-center text-light bg-dark">
+                                    <small>Cash on Hand</small>
+                                    <h2 className="display-5">${(this.state.wallet).toFixed(2)} USD</h2>
+                                </div>
+                            </div>
+                        }
                         <div className="row">
                             <div className="col-sm-6">
                                 <PortfolioComponent portfolio={this.state.portfolio}/>

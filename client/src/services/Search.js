@@ -29,7 +29,7 @@ class Search extends Component {
 
   enterText(event) {
     const arr = this.tickers;
-    let a, div, val = event.target.value;
+    let a, div, val = event.target.value.toUpperCase();
     this.closeAllLists();
     if (!val) return false;
     this.currentFocus = -1;
@@ -40,8 +40,9 @@ class Search extends Component {
     div.setAttribute("style", "position: absolute; z-index: 100");
       
     this.inp.parentNode.appendChild(div);
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].name.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+    let showing = 0;
+    for (let i=0; i<arr.length; i++) {
+      if (arr[i].name.toUpperCase().indexOf(val)>=0 || arr[i].symbol.toUpperCase().indexOf(val)>=0) {
         a = document.createElement("a");
         a.setAttribute("id", "autocomplete");
         a.setAttribute("class", "list-group-item list-group-item-action");
@@ -49,11 +50,18 @@ class Search extends Component {
         a.setAttribute("data-toggle", "modal");
         a.setAttribute("data-target","#stock");
 
-        a.innerHTML = "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
-        a.innerHTML += arr[i].name.substr(val.length);
+        const ind = arr[i].name.toUpperCase().indexOf(val);
+        if (ind+1){
+          a.innerHTML = arr[i].name.substr(0, ind);
+          a.innerHTML += "<strong>" + arr[i].name.substr(ind, val.length) + "</strong>";
+          a.innerHTML += arr[i].name.substr(ind+val.length);
+        } else a.innerHTML += arr[i].name;
+
         a.innerHTML += "<input type='hidden' value='" + arr[i].symbol + "'>";
         a.addEventListener("click", this.clickStock.bind(this));
         div.appendChild(a);
+
+        if(++showing >= 10)break;
       }
     }
   }
@@ -68,7 +76,7 @@ class Search extends Component {
     let a;
     const list = document.getElementById("autocomplete-list");
     if (list) a = list.getElementsByTagName("a");
-    console.log(event.keyCode, this.currentFocus);
+    //console.log(event.keyCode, this.currentFocus);
     if (event.keyCode === 40) {
       this.currentFocus ++;
       this.addActive(a);
@@ -103,15 +111,15 @@ class Search extends Component {
   }
 
   bringTickers() {
-    const path = "https://api.iextrading.com/1.0/ref-data/symbols";
+    const path = "http://localhost:8090/Tickers";//"https://api.iextrading.com/1.0/ref-data/symbols";
     fetch(path, { method: "get" }).then(
       function (response) {
         response.json().then(
           function (data) {
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].type === "cs" && data[i].isEnabled)
-                this.tickers.push(data[i]);
-            }
+            this.tickers = data;
+            /*for (let i = 0; i < data.length; i++) {
+              if (data[i].type === "cs" && data[i].isEnabled)this.tickers.push(data[i]);
+            }*/
           }.bind(this)
         );
       }.bind(this)

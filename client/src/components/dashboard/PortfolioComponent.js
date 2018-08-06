@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Tickers from '../../services/Tickers';
 import TickerSwap from '../../services/TickerSwap';
 import Chart from '../../services/Chart';
-import ChartsView from '../ChartsView';
-import EventBus from '../../services/EventBus';
 
 class PortfolioComponent extends Component {
     constructor(props) {
@@ -18,13 +16,13 @@ class PortfolioComponent extends Component {
 
         
     }
-    componentWillMount() {
+    /*componentWillMount() {
         if(this.props.portfolio && this.props.portfolio.tickers){
             this.props.portfolio.tickers.map(function(ticker){
                 Tickers.suscribeTicker(ticker.tickerName, "month", this.tickerUpdated);
             }.bind(this));
         }
-    }
+    }*/
 
     tickerUpdated(response){
         var obj = {};
@@ -50,6 +48,11 @@ class PortfolioComponent extends Component {
     }
 
     render() {
+        if(this.props.portfolio && this.props.portfolio.tickers){
+            this.props.portfolio.tickers.map(function(ticker){
+                if(!Tickers.isTickerSuscribed(ticker.tickerName.toLowerCase(), "month"))Tickers.suscribeTicker(ticker.tickerName.toLowerCase(), "month", this.tickerUpdated);
+            }.bind(this));
+        }
         return(
             <div className="card">
                 <div className="card-header bg-dark text-light text-center">
@@ -67,7 +70,7 @@ class PortfolioComponent extends Component {
                                                 : 'list-group-item bg-danger text-light d-flex justify-content-between align-items-center'
                                             }>
                                                 <span><small>{ticker.tickerName.toUpperCase()} </small><br/><span className="badge badge-dark badge-pill">{ticker.shares} Shares</span></span>
-                                                <Chart width="180" height="55" data={this.state[ticker.tickerName+"_month"]} type="simple"/>                                        
+                                                <Chart width="180" height="55" data={this.state[ticker.tickerName.toLowerCase()+"_month"]} type="simple"/>                                        
                                                 {this.state.isActive === ticker.tickerName
                                                     ? <span><small>Total Equity: </small><h6>${ticker.stockEquity}</h6></span>
                                                     : <span><small>${ticker.tickerValue}</small><br/><span className="badge badge-dark badge-pill">{ticker.percentChange}%</span></span>

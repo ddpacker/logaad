@@ -67,8 +67,8 @@ class PortfolioValue {
         console.log(data.length);
         //console.log("data ",data,"num",num);
         const index = data.length>=num?num:data.length-1;
-        if (!data.length)return null;
-        else if (data[index].average>0 || !index)return data[index];
+        if (index < 0)return {average:0};
+        else if (data[index] && (data[index].average>0 || !index))return data[index];
         else return this.verifyData(data, index-1);
     }
 }

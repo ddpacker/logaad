@@ -4,7 +4,8 @@ class Tickers {
     static suscribeTicker(stock, time, callBack){
         EventBus.getEventEmitter().on(stock+"_"+time, callBack);
         if(!this.tickers)this.tickers = {};
-        if(!this.tickers[stock+time])this.createTicker(stock, time);
+        //if(!this.tickers[stock+time])this.createTicker(stock, time);
+        if(!this.isTickerSuscribed(stock,time))this.createTicker(stock, time);
         this.bringStock(stock, time);
     }
     static createTicker(stock, time){
@@ -20,6 +21,9 @@ class Tickers {
             return symbol;
         });
         //console.log(symbol);
+    }
+    static isTickerSuscribed(stock, time){
+        return Boolean(this.tickers && this.tickers[stock+time]);
     }
     static bringStock(stock, time){
         const path = "https://api.iextrading.com/1.0/stock/";

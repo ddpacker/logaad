@@ -13,13 +13,15 @@ class WatchlistComponent extends Component {
         this.handleHoverIn = this.handleHoverIn.bind(this);
         this.handleHoverOut = this.handleHoverOut.bind(this);
         this.tickerUpdated = this.tickerUpdated.bind(this);
+    }
 
+    /*componentWillMount() {
         if(this.props.watchlist && this.props.watchlist.tickers){
             this.props.watchlist.tickers.map(function(ticker){
-                Tickers.suscribeTicker(ticker.tickerName, "month", this.tickerUpdated);
+                Tickers.suscribeTicker(ticker.tickerName.toLowerCase(), "month", this.tickerUpdated);
             }.bind(this));
         }
-    }
+    }*/
 
     tickerUpdated(response){
         var obj = {};
@@ -45,6 +47,11 @@ class WatchlistComponent extends Component {
     }
 
     render() {
+        if(this.props.watchlist && this.props.watchlist.tickers){
+            this.props.watchlist.tickers.map(function(ticker){
+                if(!Tickers.isTickerSuscribed(ticker.tickerName.toLowerCase(), "month"))Tickers.suscribeTicker(ticker.tickerName.toLowerCase(), "month", this.tickerUpdated);
+            }.bind(this));
+        }
         return(
             <div className="card">
                 <div className="card-header bg-dark text-light text-center">
@@ -61,7 +68,7 @@ class WatchlistComponent extends Component {
                                             : 'list-group-item bg-danger text-light d-flex justify-content-between align-items-center'
                                         }>
                                             <span><small>{ticker.tickerName.toUpperCase()} </small><br/></span>
-                                            <Chart width="180" height="55" data={this.state[ticker.tickerName+"_month"]} type="simple"/>                    
+                                            <Chart width="180" height="55" data={this.state[ticker.tickerName.toLowerCase()+"_month"]} type="simple"/>                    
                                             <span><small>${ticker.tickerValue}</small><br/></span>
                                     </div>
                                 )

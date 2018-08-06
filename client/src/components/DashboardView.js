@@ -177,7 +177,9 @@ class DashboardView extends Component {
                                 <PortfolioComponent portfolio={this.state.portfolio}/>
                             </div>
                             <div className="col-sm-6">
-                                <WatchlistComponent watchlist={this.state.watchlist}/>
+                                {this.state.watchlist 
+                                ? <WatchlistComponent watchlist={this.state.watchlist}/>
+                                : null }
                             </div>
                         </div>
                     </div>

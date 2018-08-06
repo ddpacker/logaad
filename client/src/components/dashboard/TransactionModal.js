@@ -150,6 +150,7 @@ class TransactionModule extends Component {
     }
 
     render() {
+        console.log(this.props.quantity);
         return(
             <div className="card" id="transaction">
                 <div id="collapseBuy" className="collapse collapseTransaction" data-parent="#transaction">
@@ -212,7 +213,7 @@ class TransactionModule extends Component {
                                 </div>
                         }
                         <div className="col-sm-4">
-                            {this.props.quantity !== 0 
+                            {this.props.quantity
                                 ?   <button className="btn btn-disabled btn-block">
                                         <i className="material-icons my-0 py-0">remove_red_eye</i>
                                     </button>

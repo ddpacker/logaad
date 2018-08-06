@@ -70,7 +70,7 @@ class Search extends Component {
 
   clickStock(event) {
     this.value = (event.currentTarget.getElementsByTagName("input")[0].value);
-    TickerSwap.emitSwap(this.value);
+    TickerSwap.emitSwap((this.value).toLowerCase());
     this.closeAllLists();
   }
 

@@ -94,20 +94,23 @@ class DashboardView extends Component {
         Tickers.suscribeTicker(response, "day", this.tickerUpdated.bind(this));
     }
     findWatchStatus(response) {
-        var watchFlag;
+        var watchFlag = false;
         if (this.state.watchlist) {
             this.state.watchlist.tickers.map(ticker=>{
-                if (response === ticker.tickerName) {
-                    this.setState({isWatched:true});
+                if (response.toLowerCase() === ticker.tickerName.toLowerCase()) {
+                    console.log(response.toLowerCase(), ticker.tickerName.toLowerCase())
                     watchFlag = true;
                     console.log("we are here");
+                    this.setState({isWatched:true});
                 }
             }); 
+            if (!watchFlag){
+                this.setState({isWatched:false});
+            }
+        } else {
+            this.setState({isWatched:false});
         }
-        if (!watchFlag){
-            console.log("Here");
-            this.setState({isWatched:null});
-        }
+        
     }
     findQuantity(response) {
         var quantityFlag = false;

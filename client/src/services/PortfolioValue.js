@@ -64,6 +64,7 @@ class PortfolioValue {
     }
 
     static verifyData(data, num) {
+        console.log(data.length);
         //console.log("data ",data,"num",num);
         const index = data.length>=num?num:data.length-1;
         if (!data.length)return null;

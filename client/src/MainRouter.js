@@ -8,6 +8,7 @@ import DashboardView from './components/DashboardView';
 import TestView from './components/TestView';
 
 import PrivateRoute from './PrivateRoute';
+import CleanStocks from './services/cleanStocks';
 
 const Routes = () => (
     <Router>
@@ -15,6 +16,7 @@ const Routes = () => (
             <Route exact path = '/' component = { LandingView }/>
             <Route exact path = '/test' component = { TestView }/>
             <Route exact path = '/dashboard' component = { DashboardView}/>
+            <Route exact path = '/clean' component = { CleanStocks}/>
             <Route component = { App404View }/>
         </Switch>
     </Router>

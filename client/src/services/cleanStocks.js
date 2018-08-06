@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+const APIURL = `${process.env.REACT_APP_API}`;
+
 class CleanStocks extends Component {
     constructor(){
         super();
@@ -44,7 +46,7 @@ class CleanStocks extends Component {
 
     saveTickers(){
         this.showInfo(JSON.stringify(this.tickers));
-        const path = "http://localhost:8090/SaveTickers";
+        const path = APIURL + "/SaveTickers";
         fetch(path, { method: "post", body: JSON.stringify(this.tickers) }).then(function (response) {
             response.json().then(function (data) {
                 console.log(data);

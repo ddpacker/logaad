@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import TickerSwap from "./TickerSwap";
 
+const APIURL = `${process.env.REACT_APP_API}`;
+
 class Search extends Component {
   constructor() {
     super();
@@ -111,15 +113,12 @@ class Search extends Component {
   }
 
   bringTickers() {
-    const path = "http://localhost:8090/Tickers";//"https://api.iextrading.com/1.0/ref-data/symbols";
+    const path = APIURL + "/Tickers";
     fetch(path, { method: "get" }).then(
       function (response) {
         response.json().then(
           function (data) {
             this.tickers = data;
-            /*for (let i = 0; i < data.length; i++) {
-              if (data[i].type === "cs" && data[i].isEnabled)this.tickers.push(data[i]);
-            }*/
           }.bind(this)
         );
       }.bind(this)
